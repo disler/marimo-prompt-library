@@ -1,5 +1,8 @@
 # Experimenting with marimo notebooks
 
+## Usage
+- `marimo edit is_marimo_awesome.py`
+
 ## Cheatsheet
 
 ```md
