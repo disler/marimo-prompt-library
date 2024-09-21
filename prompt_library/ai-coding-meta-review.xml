@@ -1,0 +1,47 @@
+<purpose>
+    Given a diff of code, look for bugs and provide solutions to an AI coding assistant LLM to
+    automatically fix the code.
+</purpose>
+
+<instructions>
+    <instruction>The diff-of-code will be provided in the diff-of-code block.</instruction>
+    <instruction>The code-files will be provided in the code-files block.</instruction>
+    <instruction>Respond in the output-format provided. Do not include any other text.</instruction>
+    <instruction>Respond with valid JSON.parseable JSON.</instruction>
+    <instruction>For each issue specify the file path, startingLine, aiCodingResolutionPrompt, bugDescription, and severity for each fix.</instruction>
+    <instruction>First search for critical bugs. Then search for major bugs. Then minor bugs. Then readability.</instruction>
+    <instruction>The aiCodingResolutionPrompt should be a prompt detailing the issue, the solution in natural language, and the code to fix the issue.</instruction>
+    <instruction>Return a AIAssistantResolutions object, with contains an array of fixes: AIAssistantFix.</instruction>
+</instructions>
+
+<diff-of-code>
+    <![CDATA[
+    {{diff-of-code}}
+    ]]>
+</diff-of-code>
+
+<code-files>
+    <![CDATA[ 
+    {{code-files}}
+    ]]>
+</code-files>
+
+<output-format>
+    <![CDATA[
+interface AIAssistantFix {
+    file: string; // path to the file
+    startingLine: number; // 1-based line number
+    aiCodingResolutionPrompt: string; // tell the LLM to fix the code and provide the solution.
+    bugDescription: string; // describe the bug in a few sentences.
+    // critical - bug VERY likely to happen
+    // major - serious bug, but code is shippable
+    // minor - bug that is not major
+    // readability - not a bug, but the code is not readable
+    severity: "critical" | "major" | "minor" | "readability";
+}
+
+interface AIAssistantResolutions {
+    fixes: AIAssistantFix[];
+}
+    ]]>
+</output-format>

@@ -1,0 +1,16 @@
+<purpose>
+    Create sections to generate a document that describes the key takeaways, principles, and ideas based in the provided content block. 
+</purpose>
+
+<instructions>
+    <instruction>
+        Use a simple 'title', 'theme', 'bullet points' structure. 
+    </instruction>
+    <instruction>
+        Cover as much content as you can, but don't overload bullet points, be concise and nest bullet points when you have more to add that would be valuable for understanding and utilizing the content.
+    </instruction>
+</instructions>
+
+<content>
+{{content}}
+</content>

@@ -1,0 +1,60 @@
+<purpose>
+    Analyze the aggregate sentiment of a list of comments from hn-json.
+  </purpose>
+  
+  <instructions>
+    <instruction>
+      Respond in the response-format TwoFormatSentiment structure.
+    </instruction>
+    <instruction>Analyze the sentiment of each comment and aggregate the results.</instruction>
+    <instruction>Do not return anything else. Results must be JSON.parseable.</instruction>
+    <instruction>Group your analysis into positive, nuanced, and negative categories.</instruction>
+    <instruction>Include the entire comment in the 'standOutComments' field.</instruction>
+    <instruction>Positive and negative are self-explanatory. Nuanced setiment is for comments that
+      border on positive and negative or are even mixed.</instruction>
+    <instruction>In the 'markdown' response, respond with your results from AggregateSentiment but
+      in human readable markdown format.</instruction>
+      <instruction>
+        Create at least 3 themes for each sentiment category but expand to as many novel themes as needed.
+      </instruction>
+      <instruction>
+        Include at least 3 standOutComments for each theme but expand to as many as you need.
+      </instruction>
+  </instructions>
+  
+  <hn-json>
+      <![CDATA[ 
+    {{hn-json}}
+  ]]>
+  </hn-json>
+  
+  <response-format>
+      <![CDATA[ 
+
+interface Theme {
+    idea: string; // describe the theme of this sentiment
+    count: number; // how many times this theme was mentioned
+    standOutComments: {
+        author: string;
+        comment: string;
+    }[];
+}
+
+interface AggregateSentiment {
+    positive: {
+        themes: Theme[];
+    },
+    nuanced: {
+        themes: Theme[];
+    },
+    negative: {
+        themes: Theme[];
+    }
+}
+
+interface TwoFormatSentiment {
+    json: AggregateSentiment;
+    markdown: string;
+}
+  ]]>
+  </response-format>

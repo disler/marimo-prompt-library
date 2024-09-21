@@ -5,21 +5,26 @@
 - Install dependencies `uv sync`
 - Install marimo `uv pip install marimo`
 - Copy `.env.sample` to `.env` and set your keys
-- To Edit Run `uv run marimo edit marimo_awesome.py`
-- To View Run `uv run marimo run marimo_awesome.py`
-- Then use your favorite IDE & AI Coding Assistant to edit the `marimo_awesome.py` directly or via the UI.
+- To Edit, Run `uv run marimo edit marimo_is_awesome_demo.py.py`
+- To View, Run `uv run marimo run marimo_is_awesome_demo.py.py`
+- Then use your favorite IDE & AI Coding Assistant to edit the `marimo_is_awesome_demo.py.py` directly or via the UI.
 
 ## Ad-hoc Prompt Notebook
-qqq - fill in
+> Quickly run and test prompts across models
+- To Edit, Run `uv run marimo edit adhoc_prompting.py`
+- To View, Run `uv run marimo run adhoc_prompting.py`
 
 ## Prompt Library Notebook
-qqq - fill in
+> Manage your prompt library
+- To Edit, Run `uv run marimo edit prompt_library.py`
+- To View, Run `uv run marimo run prompt_library.py`
 
 ## General Usage
+> See the [Marimo Docs](https://docs.marimo.io/index.html) for more details
 - `uv pip install marimo` - install marimo
 - `uv run marimo` - open the Marimo app in your default browser
-- `uv run marimo edit marimo_awesome.py` - create or edit an existing notebook
-- `uv run marimo run marimo_awesome.py` - run a notebook as a script
+- `uv run marimo edit marimo_is_awesome_demo.py.py` - create or edit an existing notebook
+- `uv run marimo run marimo_is_awesome_demo.py.py` - run a notebook as a script
 
 ## Prompt Library Use-Cases
 - Ad-hoc prompting
@@ -29,7 +34,7 @@ qqq - fill in
 - Multi-model comparison
 - Prompt templating
 
-## Advantages of marimo
+## Advantages of Marimo
 
 ### In General
 
