@@ -176,3 +176,5 @@ dist
 .aider*
 
 __pycache__/
+
+.venv/

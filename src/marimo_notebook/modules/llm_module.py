@@ -28,6 +28,29 @@ def prompt(model: llm.Model, prompt: str):
     return res.text()
 
 
+def prompt_with_temp(model: llm.Model, prompt: str, temperature: float = 0.7):
+    """
+    Send a prompt to the model with a specified temperature.
+
+    Args:
+    model (llm.Model): The LLM model to use.
+    prompt (str): The prompt to send to the model.
+    temperature (float): The temperature setting for the model's response. Default is 0.7.
+
+    Returns:
+    str: The model's response text.
+    """
+
+    model_id = model.model_id
+    if "o1" in model_id or "gemini" in model_id:
+        temperature = 1
+        res = model.prompt(prompt, stream=False)
+        return res.text()
+
+    res = model.prompt(prompt, stream=False, temperature=temperature)
+    return res.text()
+
+
 def get_model_name(model: llm.Model):
     return model.model_id
 
@@ -133,3 +156,27 @@ def build_openai_model_stack():
         model.key = OPENAI_API_KEY
 
     return models
+
+
+def build_openai_latest_and_fastest():
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+    gpt_4o_latest: llm.Model = llm.get_model("gpt-4o-2024-08-06")
+    gpt_4o_latest.key = OPENAI_API_KEY
+
+    gpt_4o_mini_model: llm.Model = llm.get_model("gpt-4o-mini")
+    gpt_4o_mini_model.key = OPENAI_API_KEY
+
+    return gpt_4o_latest, gpt_4o_mini_model
+
+
+def build_o1_series():
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+    o1_mini_model: llm.Model = llm.get_model("o1-mini")
+    o1_mini_model.key = OPENAI_API_KEY
+
+    o1_preview_model: llm.Model = llm.get_model("o1-preview")
+    o1_preview_model.key = OPENAI_API_KEY
+
+    return o1_mini_model, o1_preview_model

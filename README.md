@@ -4,15 +4,24 @@
 - Install hyper modern [UV Python Package and Project](https://docs.astral.sh/uv/getting-started/installation/)
 - Install dependencies `uv sync`
 - Install marimo `uv pip install marimo`
-- To Edit Run `marimo edit marimo_awesome.py`
-- To View Run `marimo run marimo_awesome.py`
+- Copy `.env.sample` to `.env` and set your keys
+- To Edit Run `uv run marimo edit marimo_awesome.py`
+- To View Run `uv run marimo run marimo_awesome.py`
 - Then use your favorite IDE & AI Coding Assistant to edit the `marimo_awesome.py` directly or via the UI.
 
 ## General Usage
 - `uv pip install marimo` - install marimo
-- `marimo` - open the Marimo app in your default browser
-- `marimo edit marimo_awesome.py` - create or edit an existing notebook
-- `marimo run marimo_awesome.py` - run a notebook as a script
+- `uv run marimo` - open the Marimo app in your default browser
+- `uv run marimo edit marimo_awesome.py` - create or edit an existing notebook
+- `uv run marimo run marimo_awesome.py` - run a notebook as a script
+
+## Prompt Library Use-Cases
+- Ad-hoc prompting
+- Prompt reuse
+- Prompt versioning
+- Interactive prompts
+- Multi-model comparison
+- Prompt templating
 
 ## Advantages of marimo
 
@@ -38,3 +47,8 @@
 - **App Deployment**: Notebooks can be served as web apps or exported to static HTML for easier sharing and deployment.
 - **Advanced Developer Tools**: Features like code formatting, GitHub Copilot integration, and debugging panels enhance the development experience.
 - **Script Execution**: Can be executed as standard Python scripts, facilitating integration into pipelines and scripts without additional tools.
+
+## Resources
+- https://docs.astral.sh/uv/
+- https://docs.marimo.io/index.html
+- 
