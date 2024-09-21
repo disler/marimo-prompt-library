@@ -1,6 +1,7 @@
 # Marimo Reactive Notebook Prompt Library
 
 ## Get Started Notebook
+> This is a simple demo of the Marimo Reactive Notebook
 - Install hyper modern [UV Python Package and Project](https://docs.astral.sh/uv/getting-started/installation/)
 - Install dependencies `uv sync`
 - Install marimo `uv pip install marimo`

@@ -9,8 +9,12 @@
     <instruction>
         Cover as much content as you can, but don't overload bullet points, be concise and nest bullet points when you have more to add that would be valuable for understanding and utilizing the content.
     </instruction>
+
+    <instruction>
+        Limit to 10 bullet points per section.
+    </instruction>
 </instructions>
 
 <content>
-{{content}}
+    {{content}}
 </content>

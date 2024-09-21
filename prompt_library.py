@@ -119,7 +119,7 @@ def __(mo, re, selected_prompt, selected_prompt_name):
     )
 
     # Create a 'Proceed' button
-    proceed_button = mo.ui.run_button(label="Proceed")
+    proceed_button = mo.ui.run_button(label="Prompt")
 
     # Display the placeholders and the 'Proceed' button in a vertical stack
     vstack = mo.vstack([
@@ -167,7 +167,6 @@ def __(filled_values, selected_prompt):
 
 @app.cell
 def __(context_filled_prompt, mo, prompt_styles):
-
     mo.vstack([
         mo.md("# Context Filled Prompt"),
         mo.accordion({

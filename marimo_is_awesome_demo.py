@@ -23,6 +23,8 @@ def __(mo):
         # Marimo Awesome Examples
 
         This notebook demonstrates various features and capabilities of Marimo. Explore the different sections to see how Marimo can be used for interactive data analysis, visualization, and more!
+
+        ---
         """
     )
     return
@@ -30,7 +32,13 @@ def __(mo):
 
 @app.cell
 def __(mo):
-    mo.md("""## 1. Basic UI Elements""")
+    mo.md(
+        """
+        ## 1. Basic UI Elements
+
+        ---
+        """
+    )
     return
 
 
@@ -58,7 +66,12 @@ def __(checkbox, mo, slider, text_input):
 
 @app.cell
 def __(mo):
-    mo.md("""## 2. Reactive Data Visualization""")
+    mo.md(
+        """
+        ## 2. Reactive Data Visualization
+        ---
+        """
+    )
     return
 
 
@@ -97,7 +110,12 @@ def __(mo, plot_type, plt, sample_df):
 
 @app.cell
 def __(mo):
-    mo.md("""## 3. Interactive Data Exploration""")
+    mo.md(
+        """
+        ## 3. Interactive Data Exploration
+        ---
+        """
+    )
     return
 
 
@@ -128,44 +146,7 @@ def __(alt, data, mo):
 
 @app.cell
 def __(mo):
-    mo.md("""## 4. Stateful Interactions""")
-    return
-
-
-@app.cell
-def __(mo):
-    get_count, set_count = mo.state(0)
-
-    def increment():
-        set_count(get_count() + 1)
-
-    def decrement():
-        set_count(get_count() - 1)
-
-    def reset():
-        set_count(0)
-
-    increment_button = mo.ui.button(label="Increment", on_click=increment)
-    decrement_button = mo.ui.button(label="Decrement", on_click=decrement)
-    reset_button = mo.ui.button(label="Reset", on_click=reset)
-
-    mo.hstack([increment_button, decrement_button, reset_button])
-    mo.md(f"**Counter: {get_count()}**")
-    return (
-        decrement,
-        decrement_button,
-        get_count,
-        increment,
-        increment_button,
-        reset,
-        reset_button,
-        set_count,
-    )
-
-
-@app.cell
-def __(mo):
-    mo.md("""## 5. Conditional Output and Control Flow""")
+    mo.md("""## 4. Conditional Output and Control Flow""")
     return
 
 
@@ -187,7 +168,7 @@ def __(mo, show_secret):
 
 @app.cell
 def __(mo):
-    mo.md("""## 6. File Handling and Data Processing""")
+    mo.md("""## 5. File Handling and Data Processing""")
     return
 
 
@@ -212,7 +193,7 @@ def __(file_upload, io, mo, pd):
 
 @app.cell
 def __(mo):
-    mo.md("""## 7. Advanced UI Components""")
+    mo.md("""## 6. Advanced UI Components""")
     return
 
 
