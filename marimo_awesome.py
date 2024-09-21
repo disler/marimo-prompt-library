@@ -8,12 +8,13 @@ app = marimo.App(width="medium")
 def __():
     import random
     import marimo as mo
+
     return mo, random
 
 
 @app.cell
 def __(mo):
-    mo.md("""# Is Marimo Awesome?""")
+    mo.md("""# Marimo Is Awesome?""")
     return
 
 
@@ -22,7 +23,7 @@ def __(mo):
     answer = mo.ui.slider(1, 10, value=8, label="How awesome is Marimo?")
 
     answer
-    return answer,
+    return (answer,)
 
 
 @app.cell
@@ -37,19 +38,25 @@ def __(answer, mo):
         result = "Hmm, maybe you need to explore Marimo more? 🧐"
 
     mo.md(f"## Result\n\n{result}")
-    return result,
+    return (result,)
 
 
 @app.cell
 def __(mo):
 
-    fact = mo.ui.button(value=False, label="Click to generate a random fact about Marimo", on_click=lambda v: not v)
+    fact = mo.ui.button(
+        value=False,
+        label="Click to generate a random fact about Marimo",
+        on_click=lambda v: not v,
+    )
 
-    mo.md(f"""### Fun fact
+    mo.md(
+        f"""### Fun fact
     {fact}
-    """)
+    """
+    )
 
-    return fact,
+    return (fact,)
 
 
 @app.cell
@@ -59,7 +66,7 @@ def __(fact, mo, random):
         "You can create reactive web apps with pure Python in Marimo.",
         "Marimo supports various UI elements like sliders, buttons, and more.",
         "Marimo notebooks are version control friendly.",
-        "You can easily share Marimo apps with others."
+        "You can easily share Marimo apps with others.",
     ]
 
     random_fact = random.choice(facts) if fact.value else ""

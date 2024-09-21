@@ -1,293 +1,40 @@
-# Experimenting with marimo notebooks
+# Marimo Reactive Notebook Prompt Library
 
-## Usage
-- `marimo edit is_marimo_awesome.py`
+## Get Started
+- Install hyper modern [UV Python Package and Project](https://docs.astral.sh/uv/getting-started/installation/)
+- Install dependencies `uv sync`
+- Install marimo `uv pip install marimo`
+- To Edit Run `marimo edit marimo_awesome.py`
+- To View Run `marimo run marimo_awesome.py`
+- Then use your favorite IDE & AI Coding Assistant to edit the `marimo_awesome.py` directly or via the UI.
 
-## Cheatsheet
+## General Usage
+- `uv pip install marimo` - install marimo
+- `marimo` - open the Marimo app in your default browser
+- `marimo edit marimo_awesome.py` - create or edit an existing notebook
+- `marimo run marimo_awesome.py` - run a notebook as a script
 
-```md
-Here's the markdown version of the content from the image:
+## Advantages of marimo
 
-```markdown
-# Marimo Cheat Sheet 0.2.5
+### In General
 
-## Install and Import
+- **Reactive Execution**: Run one cell, and marimo automatically updates all affected cells. This eliminates the need to manually manage notebook state.
+- **Interactive Elements**: Provides reactive UI elements like dataframe GUIs and plots, making data exploration fast and intuitive.
+- **Python-First Design**: Notebooks are pure Python scripts stored as `.py` files. They can be versioned with git, run as scripts, and imported into other Python code.
+- **Reproducible by Default**: Deterministic execution order with no hidden state ensures consistent and reproducible results.
+- **Built for Collaboration**: Git-friendly notebooks where small changes yield small diffs, facilitating collaboration.
+- **Developer-Friendly Features**: Includes GitHub Copilot, autocomplete, hover tooltips, vim keybindings, code formatting, debugging panels, and extensive hotkeys.
+- **Seamless Transition to Production**: Notebooks can be run as scripts or deployed as read-only web apps.
+- **Versatile Use Cases**: Ideal for experimenting with data and models, building internal tools, communicating research, education, and creating interactive dashboards.
 
-### Install
-```bash
-pip install marimo
-```
-```bash
-marimo (open Marimo app) 
-```
-Open Safari 
-```bash
-http://localhost:8888
-```
-### Open Tutorials
-```bash
-marimo tutorial DITTS
-```
-### View Server Info
-```bash
-marimo tutorial --help
-```
-```bash
-Create new notebook
-```
-```bash
-> create notebook
-```
-```bash
-ls lists directories
-```
-```bash
-marimo export my_notebook.py
-```
-### Serve notebook as script
-```bash
-marimo serve my_notebook.py
-```
-### Serve notebook as app
-```bash
-marimo export my_notebook.json > your_notebook.py
-```
-```bash
-Run jupyter server
-```
-```bash
-jupyter notebook
-```
-```bash
-marimo export my_notebook.json > your_notebook.py
-```
-### CLI Commands (MARIMO CLI)
-```bash
-marimo -p {PORT} NAME  
-```
-```bash
---p  {PORT}  SERVER to attach to.
-```
-```bash
---h --show home screen in the app.
-```
-```bash
---h  displays   Home screen in app.
-```
-```bash
-marimo export my_notebook.json > your_notebook.py
-```
-**Server Port Tips**:
-```bash
-If a port is busy use --port option. Server should start with /, /app subfolder. Use CLI or URL to access.
-```
-### Run server and exit. 
-[GitHub](https://github.com/tithyhs/marimo-cheat-sheet)  
-[Docs](http://docs.marimo.io)
+### Advantages Over Jupyter Notebooks
 
-## Inputs
-```python
-# Array of ID elements
-ctlA.get_value(df.id),  ctlC.set()  
-
-# Add new elements with sample label labels[]
-new_labels.add('example_label'),['label'],['tag',C.init()])
-
-# Buttons with optional on-click
-m.ui_buttons(labels=[‘Ok’, 9], Labeled=‘Click Me’, m.ui_onclick('on_click'))
-
-# Basic checkbox layout
-ctl_inputs.add(['label':('Check me')])
-
-# Combo box code
-def_code_box[selector='dropdown',['shown']])
-
-# Dataframe code: column_names df.columns.labels df.cf.head()]
-df_render_data(df,'render_data','visualizations']
-
-# Dictionary
-m.ui_dictionary([‘text’:‘No.1 Column’, ‘data’: m.ui.set(df)])
-```
-#### Set Dropdown
-
-```python
-# Slider
-m.ui_checkbox(['id_range=[‘1’,‘Choice 2’]', ‘Choice 2'])
-```
-#### Multi Dropdown
-
-```python
-m.ui_multiselect(options=['Basic',3,'Row 5'])
-```
-### Table output
-
-```python
-table().rows=['Header',['Example 1'5,‘Item 2’])
-```
-#### Expand
-```python
-rows(), show_folded_value()
-```
-## MarkDown
-```markdown
-## Music markdown
-
-- # 'Markdown Text' 
-- ## Integrative Playlist - Start
-```
-```bash
- m.link('https://spotify' }])
-```
-**Text Positioning**  
-```python
-m.md_text('Hello world') ])
-```
-```python
-m.md_link('Playlist URL  ')
-```
-Zoom in  
-```python
-m_md_zoom ]
-```
-```python
-m.md_add_input_code(`music-rocker`)`
-```
-```markdown
-- **Use Syntax:**
-'|data_content',['m.md_render('Tooltip-Hello')])
-```
-```markdown
-Code Syntax:
-‘’`
-```
-## Outputs
-```python
-# Replace cell's output  
-m.output_replace(‘cell_output2’)
-
-# Append data cell
-m_output(append_cell('cell-output3’)
-```
-## Plotting
-```python
-# Create Axis chart
-chart.plot(df_chart_data()).axis(['figure_color='],‘Width_px,G.title['Origin'])
-
-# Add chart (after show function)
- m.axis_chart([],function_completed)
-
-# Chart as Plotly interactive
-axis_chart_loader['function_return_chart'])
-```
-```python
-m.set.axis.plot(figure_data['canvas']).plot.chart.[sizes=s,parameter=plots])
-
-m.plot_data(plt.D3,[],[interactive() ])
-```
-### Plot
-
-```python
-plt.axis(['Start Plot'])
-``` 
-## Media
-### Render an image
-
-```python
-m.md_image({‘File.jpg’})
-‘Image description’=[m.md_title_image-].add-Image id:to_800)
-```
-Add Markdown Media:
-```python
-m.media_add(video‘video_display  ]])
-m_media.stream({'Source_load-[‘MP4')})
-```
-```python
-img_embed=[m.youtube_link].render.{MP4’],embed[call]).allow('toggle_toolbar()’))
-```
-Embed Audio
-```python
-md.audio(‘audio_name', 'path.mp3')
-
-m.md_figure.img_reference.link'
-```
-## Diagrams
-### Define Diagram
-```python
-m_diag_define(m.diagram_structure].create()
- 
-# Label
-diagram_diagram('Line path',['Node Arrow'])
-``` 
-### Showing simple path
-```python
-simple_showchart='Example Path', ‘label','Diagonal_top'])
-``` 
-```python
-path_node]-(vertical_direction)]
-``` 
-## Status
-```python
-# Progress bars
- progress_text(‘task-subtitle-updating.progress’)  
-
-[Fetching Data]
-[please_processing_title_loadtext_spinner.png]
-```
-#### Time Display Progress  
-```python
-time.sleep(['progress_loader'])
-```
-## Control Flow
-```python
-# If/Else Looping State Variables
-# Call cell_state.log (['iteration_num=0)
-```
-```python
-# Ends current loop iteration/executes cell 
-```  
-```python
-def.goto(‘state=cell_suspended’)
-ctl_current({state}).wait()  
-```
-## State
-### State Management Code
-
-```python
-ctl_set.state=[]['C.State']
- ctl_render_type(['current_frame_reset()])
-# toggle state
-ctl_state]
-```
-## HTML  
-### Convert Python to HTML
-```python
-html_cell.add(html.tags()```
-html_justified
-```
-```python
- m.html_create_wrapper
-def(fixalignment_item])
-
-# Apply single batch to cell
-html.md_wrap.applyAlign(color)
-```
-### Set Justify  
- ```python 
-html_tag.set='center]
-```
-## Debug
-### Debugging cell output:
-```python
-ctl_debug().output
-m.debug.retrieve_debug().info
-```
-### Inspect Execution Code
-```python
- ctl_last.debug()
-``` 
-[GitHub](https://github.com/tithyhs/marimo-cheat-sheet)  
-[Docs](http://docs.marimo.io)
-```
-
-This markdown maintains the structure and details found in the cheat sheet. Let me know if you need further adjustments!
-```
+- **Reactive Notebook**: Automatically updates dependent cells when code or values change, unlike Jupyter where cells must be manually re-executed.
+- **Pure Python Notebooks**: Stored as `.py` files instead of JSON, making them easier to version control, lint, and integrate with Python tooling.
+- **No Hidden State**: Deleting a cell removes its variables and updates affected cells, reducing errors from stale variables.
+- **Better Git Integration**: Plain Python scripts result in smaller diffs and more manageable version control compared to Jupyter's JSON format.
+- **Import Symbols**: Allows importing symbols from notebooks into other notebooks or Python files.
+- **Enhanced Interactivity**: Built-in reactive UI elements provide a more interactive experience than standard Jupyter widgets.
+- **App Deployment**: Notebooks can be served as web apps or exported to static HTML for easier sharing and deployment.
+- **Advanced Developer Tools**: Features like code formatting, GitHub Copilot integration, and debugging panels enhance the development experience.
+- **Script Execution**: Can be executed as standard Python scripts, facilitating integration into pipelines and scripts without additional tools.
