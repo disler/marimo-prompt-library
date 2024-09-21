@@ -1,6 +1,6 @@
 # Marimo Reactive Notebook Prompt Library
 
-## Get Started
+## Get Started Notebook
 - Install hyper modern [UV Python Package and Project](https://docs.astral.sh/uv/getting-started/installation/)
 - Install dependencies `uv sync`
 - Install marimo `uv pip install marimo`
@@ -8,6 +8,12 @@
 - To Edit Run `uv run marimo edit marimo_awesome.py`
 - To View Run `uv run marimo run marimo_awesome.py`
 - Then use your favorite IDE & AI Coding Assistant to edit the `marimo_awesome.py` directly or via the UI.
+
+## Ad-hoc Prompt Notebook
+qqq - fill in
+
+## Prompt Library Notebook
+qqq - fill in
 
 ## General Usage
 - `uv pip install marimo` - install marimo
