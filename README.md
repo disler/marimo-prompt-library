@@ -1,42 +1,43 @@
 # Marimo Reactive Notebook Prompt Library
-> Here we use Marimo reactive notebooks to build a reusable, customizable, Prompt Library.
+> Starter codebase to use Marimo reactive notebooks to build a reusable, customizable, Prompt Library.
+>
+> Take this codebase and use it as a starter codebase to build your own personal prompt library.
+>
 > Marimo reactive notebooks & Prompt Library [walkthrough](https://youtu.be/PcLkBkQujMI)
 
 <img src="./images/marimo_prompt_library.png" alt="marimo promptlibrary" style="max-width: 750px;">
 
-## Get Started Notebook
+## 1. Understand Marimo Notebook
 > This is a simple demo of the Marimo Reactive Notebook
 - Install hyper modern [UV Python Package and Project](https://docs.astral.sh/uv/getting-started/installation/)
 - Install dependencies `uv sync`
 - Install marimo `uv pip install marimo`
-- Copy `.env.sample` to `.env` and set your keys
 - To Edit, Run `uv run marimo edit marimo_is_awesome_demo.py`
 - To View, Run `uv run marimo run marimo_is_awesome_demo.py`
 - Then use your favorite IDE & AI Coding Assistant to edit the `marimo_is_awesome_demo.py` directly or via the UI.
 
-## Ad-hoc Prompt Notebook
+## 2. Ad-hoc Prompt Notebook
 > Quickly run and test prompts across models
+- 🟡 Copy `.env.sample` to `.env` and set your keys
 - To Edit, Run `uv run marimo edit adhoc_prompting.py`
 - To View, Run `uv run marimo run adhoc_prompting.py`
 
-## Prompt Library Notebook
-> Manage your prompt library
+## 3. ⭐️ Prompt Library Notebook
+> Build, Manage, Reuse, Version, and Iterate on your Prompt Library
+- 🟡 Copy `.env.sample` to `.env` and set your keys
 - To Edit, Run `uv run marimo edit prompt_library.py`
 - To View, Run `uv run marimo run prompt_library.py`
 
 ## General Usage
-> See the [Marimo Docs](https://docs.marimo.io/index.html) for more details
-- `uv pip install marimo` - install marimo
-- `uv run marimo` - open the Marimo app in your default browser
-- `uv run marimo edit marimo_is_awesome_demo.py` - create or edit an existing notebook
-- `uv run marimo run marimo_is_awesome_demo.py` - run a notebook as a script
+> See the [Marimo Docs](https://docs.marimo.io/index.html) for general usage details
 
-## Prompt Library Use-Cases
+## Personal Prompt Library Use-Cases
 - Ad-hoc prompting
 - Prompt reuse
 - Prompt versioning
 - Interactive prompts
-- Multi-model comparison
+- Prompt testing & Benchmarking
+- LLM comparison
 - Prompt templating
 - Anything you can imagine!
 
