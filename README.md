@@ -18,13 +18,15 @@
 
 ## 2. Ad-hoc Prompt Notebook
 > Quickly run and test prompts across models
-- 🟡 Copy `.env.sample` to `.env` and set your keys
+- 🟡 Copy `.env.sample` to `.env` and set your keys (minimally set `OPENAI_API_KEY`)
+    - Add other keys and update the notebook to add support for additional SOTA LLMs
 - To Edit, Run `uv run marimo edit adhoc_prompting.py`
 - To View, Run `uv run marimo run adhoc_prompting.py`
 
 ## 3. ⭐️ Prompt Library Notebook
 > Build, Manage, Reuse, Version, and Iterate on your Prompt Library
-- 🟡 Copy `.env.sample` to `.env` and set your keys
+- 🟡 Copy `.env.sample` to `.env` and set your keys (minimally set `OPENAI_API_KEY`)
+    - Add other keys and update the notebook to add support for additional SOTA LLMs
 - To Edit, Run `uv run marimo edit prompt_library.py`
 - To View, Run `uv run marimo run prompt_library.py`
 

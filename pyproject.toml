@@ -1,7 +1,7 @@
 [project]
-name = "marimo-notebook-prompt-library"
+name = "marimo-notebook"
 version = "0.1.0"
-description = "Engineer your prompt library in Marimo"
+description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -19,6 +19,7 @@ dependencies = [
     "vega-datasets>=0.9.0",
     "tornado>=6.4.1",
     "llm-claude-3>=0.4.1",
+    "marimo>=0.8.18",
 ]
 
 [build-system]

@@ -20,28 +20,25 @@ def __(prompt_library_module):
 
 @app.cell
 def __(llm_module):
-    llm_sonnet = llm_module.build_sonnet_3_5()
     llm_o1_mini, llm_o1_preview = llm_module.build_o1_series()
     llm_gpt_4o_latest, llm_gpt_4o_mini = llm_module.build_openai_latest_and_fastest()
-    gemini_1_5_pro, gemini_1_5_flash = llm_module.build_gemini_duo()
+    # llm_sonnet = llm_module.build_sonnet_3_5()
+    # gemini_1_5_pro, gemini_1_5_flash = llm_module.build_gemini_duo()
 
     models = {
-        "sonnet-3.5": llm_sonnet,
         "o1-mini": llm_o1_mini,
         "o1-preview": llm_o1_preview,
         "gpt-4o-latest": llm_gpt_4o_latest,
         "gpt-4o-mini": llm_gpt_4o_mini,
-        "gemini-1-5-pro": gemini_1_5_pro,
-        "gemini-1-5-flash": gemini_1_5_flash,
+        # "sonnet-3.5": llm_sonnet,
+        # "gemini-1-5-pro": gemini_1_5_pro,
+        # "gemini-1-5-flash": gemini_1_5_flash,
     }
     return (
-        gemini_1_5_flash,
-        gemini_1_5_pro,
         llm_gpt_4o_latest,
         llm_gpt_4o_mini,
         llm_o1_mini,
         llm_o1_preview,
-        llm_sonnet,
         models,
     )
 
@@ -62,7 +59,7 @@ def __(map_prompt_library, mo, models):
     model_dropdown = mo.ui.dropdown(
         options=models,
         label="Select an LLM Model",
-        value="sonnet-3.5",
+        value="gpt-4o-mini",
     )
     form = (
         mo.md(
@@ -90,12 +87,18 @@ def __(form, map_prompt_library, mo, prompt_styles):
     mo.stop(not form.value or not len(form.value), "")
     selected_prompt_name = form.value["prompt_dropdown"]
     selected_prompt = map_prompt_library[selected_prompt_name]
-    mo.vstack([
-        mo.md("# Selected Prompt"),
-        mo.accordion({
-            "### Click to show": mo.md(f"```xml\n{selected_prompt}\n```").style(prompt_styles)
-        }),
-    ])
+    mo.vstack(
+        [
+            mo.md("# Selected Prompt"),
+            mo.accordion(
+                {
+                    "### Click to show": mo.md(f"```xml\n{selected_prompt}\n```").style(
+                        prompt_styles
+                    )
+                }
+            ),
+        ]
+    )
     return selected_prompt, selected_prompt_name
 
 
@@ -115,18 +118,15 @@ def __(mo, re, selected_prompt, selected_prompt_name):
 
     # Create an array of placeholder inputs
     placeholder_array = mo.ui.array(
-        placeholder_inputs, label="Fill in the Placeholders",
+        placeholder_inputs,
+        label="Fill in the Placeholders",
     )
 
     # Create a 'Proceed' button
     proceed_button = mo.ui.run_button(label="Prompt")
 
     # Display the placeholders and the 'Proceed' button in a vertical stack
-    vstack = mo.vstack([
-        mo.md("# Prompt Variables"),
-        placeholder_array,
-        proceed_button
-    ])
+    vstack = mo.vstack([mo.md("# Prompt Variables"), placeholder_array, proceed_button])
     vstack
     return (
         placeholder_array,
@@ -146,7 +146,10 @@ def __(mo, placeholder_array, placeholders, proceed_button):
         mo.stop(True, mo.md("**Please fill in all placeholders.**"))
 
     # Ensure the 'Proceed' button has been pressed
-    mo.stop(not proceed_button.value, mo.md("**Please press the 'Proceed' button to continue.**"))
+    mo.stop(
+        not proceed_button.value,
+        mo.md("**Please press the 'Proceed' button to continue.**"),
+    )
 
     # Map the placeholder names to the values
     filled_values = dict(zip(placeholders, placeholder_array.value))
@@ -167,12 +170,18 @@ def __(filled_values, selected_prompt):
 
 @app.cell
 def __(context_filled_prompt, mo, prompt_styles):
-    mo.vstack([
-        mo.md("# Context Filled Prompt"),
-        mo.accordion({
-            "### Click to Show Context Filled Prompt": mo.md(f"```xml\n{context_filled_prompt}\n```").style(prompt_styles)
-        })
-    ])
+    mo.vstack(
+        [
+            mo.md("# Context Filled Prompt"),
+            mo.accordion(
+                {
+                    "### Click to Show Context Filled Prompt": mo.md(
+                        f"```xml\n{context_filled_prompt}\n```"
+                    ).style(prompt_styles)
+                }
+            ),
+        ]
+    )
     return
 
 
