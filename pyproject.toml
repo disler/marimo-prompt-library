@@ -1,7 +1,7 @@
 [project]
 name = "marimo-notebook"
 version = "0.1.0"
-description = "Add your description here"
+description = "Starter codebase to use Marimo reactive notebooks to build a reusable, customizable, Prompt Library."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
