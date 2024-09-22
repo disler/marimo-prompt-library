@@ -83,3 +83,4 @@
 - https://docs.marimo.io/index.html
 - https://youtu.be/PcLkBkQujMI
 - https://github.com/BuilderIO/gpt-crawler
+- https://github.com/simonw/llm
