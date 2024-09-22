@@ -1,4 +1,8 @@
 # Marimo Reactive Notebook Prompt Library
+> Here we use Marimo reactive notebooks to build a reusable, customizable, Prompt Library.
+> Marimo reactive notebooks & Prompt Library [walkthrough](https://youtu.be/PcLkBkQujMI)
+
+<img src="./images/marimo_prompt_library.png" alt="marimo promptlibrary" style="max-width: 750px;">
 
 ## Get Started Notebook
 > This is a simple demo of the Marimo Reactive Notebook
@@ -6,9 +10,9 @@
 - Install dependencies `uv sync`
 - Install marimo `uv pip install marimo`
 - Copy `.env.sample` to `.env` and set your keys
-- To Edit, Run `uv run marimo edit marimo_is_awesome_demo.py.py`
-- To View, Run `uv run marimo run marimo_is_awesome_demo.py.py`
-- Then use your favorite IDE & AI Coding Assistant to edit the `marimo_is_awesome_demo.py.py` directly or via the UI.
+- To Edit, Run `uv run marimo edit marimo_is_awesome_demo.py`
+- To View, Run `uv run marimo run marimo_is_awesome_demo.py`
+- Then use your favorite IDE & AI Coding Assistant to edit the `marimo_is_awesome_demo.py` directly or via the UI.
 
 ## Ad-hoc Prompt Notebook
 > Quickly run and test prompts across models
@@ -24,8 +28,8 @@
 > See the [Marimo Docs](https://docs.marimo.io/index.html) for more details
 - `uv pip install marimo` - install marimo
 - `uv run marimo` - open the Marimo app in your default browser
-- `uv run marimo edit marimo_is_awesome_demo.py.py` - create or edit an existing notebook
-- `uv run marimo run marimo_is_awesome_demo.py.py` - run a notebook as a script
+- `uv run marimo edit marimo_is_awesome_demo.py` - create or edit an existing notebook
+- `uv run marimo run marimo_is_awesome_demo.py` - run a notebook as a script
 
 ## Prompt Library Use-Cases
 - Ad-hoc prompting
@@ -34,10 +38,21 @@
 - Interactive prompts
 - Multi-model comparison
 - Prompt templating
+- Anything you can imagine!
 
 ## Advantages of Marimo
 
-### In General
+### Key Advantages
+> Rapid Prototyping: Seamlessly transition between user and builder mode with `cmd+.` to toggle. Consumer vs Producer. UI vs Code. 
+
+> Interactivity: Built-in reactive UI elements enable intuitive data exploration and visualization.
+
+> Reactivity: Cells automatically update when dependencies change, ensuring a smooth and efficient workflow.
+
+> Out of the box: Use sliders, textareas, buttons, images, dataframe GUIs, plotting, and other interactive elements to quickly iterate on ideas.
+
+> It's 'just' Python: Pure Python scripts for easy version control and AI coding.
+
 
 - **Reactive Execution**: Run one cell, and marimo automatically updates all affected cells. This eliminates the need to manually manage notebook state.
 - **Interactive Elements**: Provides reactive UI elements like dataframe GUIs and plots, making data exploration fast and intuitive.
@@ -63,4 +78,3 @@
 ## Resources
 - https://docs.astral.sh/uv/
 - https://docs.marimo.io/index.html
-- 

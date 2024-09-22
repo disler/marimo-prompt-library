@@ -9,7 +9,6 @@ def __():
     import marimo as mo
     from src.marimo_notebook.modules import llm_module
     import json
-
     return json, llm_module, mo
 
 
@@ -32,6 +31,8 @@ def __(llm_module):
     return (
         gemini_1_5_flash,
         gemini_1_5_pro,
+        llm_gpt_4o_latest,
+        llm_gpt_4o_mini,
         llm_o1_mini,
         llm_o1_preview,
         llm_sonnet,

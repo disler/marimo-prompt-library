@@ -59,6 +59,7 @@ def __(checkbox, mo, slider, text_input):
     Slider value: {slider.value}
     Checkbox state: {checkbox.value}
     Text input: {text_input.value}
+    Slider * Text input: {slider.value * "⭐️"}
     """
     )
     return
@@ -86,7 +87,12 @@ def __(mo, pd):
         options=["scatter", "line", "bar"], value="scatter", label="Select Plot Type"
     )
 
-    mo.vstack([plot_type, mo.ui.table(sample_df, selection=None)])
+    mo.vstack(
+        [
+            plot_type,
+            # mo.ui.table(sample_df, selection=None)
+        ]
+    )
     return plot_type, sample_df
 
 
@@ -110,43 +116,7 @@ def __(mo, plot_type, plt, sample_df):
 
 @app.cell
 def __(mo):
-    mo.md(
-        """
-        ## 3. Interactive Data Exploration
-        ---
-        """
-    )
-    return
-
-
-@app.cell
-def __(data, mo):
-    cars = data.cars()
-    mo.ui.data_explorer(cars)
-    return (cars,)
-
-
-@app.cell
-def __(alt, data, mo):
-    chart = (
-        alt.Chart(data.cars())
-        .mark_circle()
-        .encode(
-            x="Horsepower",
-            y="Miles_per_Gallon",
-            color="Origin",
-            tooltip=["Name", "Origin", "Horsepower", "Miles_per_Gallon"],
-        )
-        .interactive()
-    )
-
-    mo.ui.altair_chart(chart)
-    return (chart,)
-
-
-@app.cell
-def __(mo):
-    mo.md("""## 4. Conditional Output and Control Flow""")
+    mo.md("""## 3. Conditional Output and Control Flow""")
     return
 
 
@@ -168,7 +138,7 @@ def __(mo, show_secret):
 
 @app.cell
 def __(mo):
-    mo.md("""## 5. File Handling and Data Processing""")
+    mo.md("""## 4. File Handling and Data Processing""")
     return
 
 
@@ -193,7 +163,7 @@ def __(file_upload, io, mo, pd):
 
 @app.cell
 def __(mo):
-    mo.md("""## 6. Advanced UI Components""")
+    mo.md("""## 5. Advanced UI Components""")
     return
 
 
@@ -234,7 +204,7 @@ def __(mo):
 
 @app.cell
 def __(mo):
-    mo.md("""## 8. Batch Operations and Forms""")
+    mo.md("""## 6. Batch Operations and Forms""")
     return
 
 
@@ -286,7 +256,7 @@ def __(mo, user_form):
 
 @app.cell
 def __(mo):
-    mo.md("""## 9. Embedding External Content""")
+    mo.md("""## 7. Embedding External Content""")
     return
 
 
@@ -308,7 +278,7 @@ def __(mo):
 
 @app.cell
 def __(mo):
-    mo.md("""## 10. Custom Styling and Layouts""")
+    mo.md("""## 8. Custom Styling and Layouts""")
     return
 
 
@@ -361,6 +331,42 @@ def __(mo):
 
     layout
     return (layout,)
+
+
+@app.cell
+def __(mo):
+    mo.md(
+        """
+        ## 9. Interactive Data Exploration
+        ---
+        """
+    )
+    return
+
+
+@app.cell
+def __(data, mo):
+    cars = data.cars()
+    mo.ui.data_explorer(cars)
+    return (cars,)
+
+
+@app.cell
+def __(alt, data, mo):
+    chart = (
+        alt.Chart(data.cars())
+        .mark_circle()
+        .encode(
+            x="Horsepower",
+            y="Miles_per_Gallon",
+            color="Origin",
+            tooltip=["Name", "Origin", "Horsepower", "Miles_per_Gallon"],
+        )
+        .interactive()
+    )
+
+    mo.ui.altair_chart(chart)
+    return (chart,)
 
 
 @app.cell

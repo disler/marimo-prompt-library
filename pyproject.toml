@@ -1,7 +1,7 @@
 [project]
-name = "marimo-notebook"
+name = "marimo-notebook-prompt-library"
 version = "0.1.0"
-description = "Add your description here"
+description = "Engineer your prompt library in Marimo"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
