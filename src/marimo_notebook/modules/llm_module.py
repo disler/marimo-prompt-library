@@ -92,7 +92,7 @@ def build_latest_openai():
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
     # chatgpt_4o_latest_model: llm.Model = llm.get_model("chatgpt-4o-latest") - experimental
-    chatgpt_4o_latest_model: llm.Model = llm.get_model("gpt-4o-2024-08-06")
+    chatgpt_4o_latest_model: llm.Model = llm.get_model("gpt-4o")
     chatgpt_4o_latest_model.key = OPENAI_API_KEY
     return chatgpt_4o_latest_model
 
@@ -141,7 +141,7 @@ def build_openai_model_stack():
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
     gpt4_o_mini_model: llm.Model = llm.get_model("gpt-4o-mini")
-    gpt4_o_2024_08_06_model: llm.Model = llm.get_model("gpt-4o-2024-08-06")
+    gpt4_o_2024_08_06_model: llm.Model = llm.get_model("gpt-4o")
     o1_preview_model: llm.Model = llm.get_model("o1-preview")
     o1_mini_model: llm.Model = llm.get_model("o1-mini")
 
@@ -161,7 +161,7 @@ def build_openai_model_stack():
 def build_openai_latest_and_fastest():
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-    gpt_4o_latest: llm.Model = llm.get_model("gpt-4o-2024-08-06")
+    gpt_4o_latest: llm.Model = llm.get_model("gpt-4o")
     gpt_4o_latest.key = OPENAI_API_KEY
 
     gpt_4o_mini_model: llm.Model = llm.get_model("gpt-4o-mini")
