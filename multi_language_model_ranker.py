@@ -1,10 +1,7 @@
 import marimo
 
 __generated_with = "0.8.18"
-app = marimo.App(
-    width="full",
-    layout_file="layouts/multi_llm_prompting.grid.json",
-)
+app = marimo.App(width="full")
 
 
 @app.cell
@@ -14,8 +11,13 @@ def __():
     import src.marimo_notebook.modules.prompt_library_module as prompt_library_module
     import json
     import pyperclip
-
     return json, llm_module, mo, prompt_library_module, pyperclip
+
+
+@app.cell
+def __(prompt_library_module):
+    map_testable_prompts: dict = prompt_library_module.pull_in_testable_prompts()
+    return (map_testable_prompts,)
 
 
 @app.cell
@@ -57,8 +59,11 @@ def __(llm_module):
 
 
 @app.cell
-def __(mo, models):
-    prompt_text_area = mo.ui.text_area(label="Prompt", full_width=True)
+def __(map_testable_prompts, mo, models):
+    prompt_dropdown = mo.ui.dropdown(
+        options=list(map_testable_prompts.keys()),
+        label="Select a Prompt",
+    )
     prompt_temp_slider = mo.ui.slider(
         start=0, stop=1, value=0.5, step=0.05, label="Temp"
     )
@@ -67,30 +72,55 @@ def __(mo, models):
         label="Models",
         value=["gpt-4o-mini", "llama3-2", "gemini-1-5-flash-002"],
     )
+    return model_multiselect, prompt_dropdown, prompt_temp_slider
 
+
+@app.cell
+def __():
+    prompt_style = {
+        "background": "#eee",
+        "padding": "10px",
+        "border-radius": "10px",
+        "margin-bottom": "20px",
+    }
+    return (prompt_style,)
+
+
+@app.cell
+def __(mo, model_multiselect, prompt_dropdown, prompt_temp_slider):
     form = (
         mo.md(
             r"""
-            # Multi-LLM Prompt
+            # Multi Language Model Ranker 📊
             {prompt}
             {temp}
             {models}
             """
         )
         .batch(
-            prompt=prompt_text_area,
+            prompt=prompt_dropdown,
             temp=prompt_temp_slider,
             models=model_multiselect,
         )
         .form()
     )
     form
-    return form, model_multiselect, prompt_temp_slider, prompt_text_area
+    return (form,)
 
 
 @app.cell
-def __(form, llm_module, mo, prompt_library_module):
+def __(form, mo):
+    selected_models_string = mo.ui.array([mo.ui.text(value=m.model_id, disabled=True) for m in form.value['models']])
+    mo.hstack(selected_models_string,align="start", justify="start")
+    return (selected_models_string,)
+
+
+@app.cell
+def __(form, llm_module, map_testable_prompts, mo, prompt_library_module):
     mo.stop(not form.value, "")
+
+    selected_prompt_name = form.value["prompt"]
+    selected_prompt = map_testable_prompts[selected_prompt_name]
 
     prompt_responses = []
 
@@ -99,12 +129,11 @@ def __(form, llm_module, mo, prompt_library_module):
         total=len(form.value["models"]),
         remove_on_exit=True,
     ) as prog_bar:
-        # with mo.status.spinner(title="Running prompts on selected models...") as _spinner:
         for model in form.value["models"]:
             model_name = model.model_id
             prog_bar.update(title=f"Prompting '{model_name}'", increment=1)
             response = llm_module.prompt_with_temp(
-                model, form.value["prompt"], form.value["temp"]
+                model, selected_prompt, form.value["temp"]
             )
             prompt_responses.append(
                 {
@@ -122,9 +151,9 @@ def __(form, llm_module, mo, prompt_library_module):
 
     # Record the execution
     execution_filepath = prompt_library_module.record_llm_execution(
-        prompt=form.value["prompt"],
+        prompt=selected_prompt,
         list_model_execution_dict=list_model_execution_dict,
-        prompt_template=None,  # You can add a prompt template if you have one
+        prompt_template=selected_prompt_name,
     )
     print(f"Execution record saved to: {execution_filepath}")
     return (
@@ -135,11 +164,13 @@ def __(form, llm_module, mo, prompt_library_module):
         prog_bar,
         prompt_responses,
         response,
+        selected_prompt,
+        selected_prompt_name,
     )
 
 
 @app.cell
-def __(mo, prompt_responses, pyperclip):
+def __(mo, prompt_responses, prompt_style, pyperclip):
     def copy_to_clipboard(text):
         print("copying: ", text)
         pyperclip.copy(text)
@@ -151,14 +182,7 @@ def __(mo, prompt_responses, pyperclip):
                 mo.md(f"# Prompt Output ({response['model_id']})"),
                 mo.md(response["output"]),
             ]
-        ).style(
-            {
-                "background": "#eee",
-                "padding": "10px",
-                "border-radius": "10px",
-                "margin-bottom": "20px",
-            }
-        )
+        ).style(prompt_style)
         for (idx, response) in enumerate(prompt_responses)
     ]
 
