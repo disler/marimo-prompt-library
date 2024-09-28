@@ -57,7 +57,7 @@ class FusionChain:
             all_prompt_responses=all_outputs,
             all_context_filled_prompts=all_context_filled_prompts,
             performance_scores=performance_scores,
-            model_names=model_names,
+            llm_model_names=model_names,
         )
 
     @staticmethod
@@ -118,7 +118,7 @@ class FusionChain:
             all_prompt_responses=all_outputs,
             all_context_filled_prompts=all_context_filled_prompts,
             performance_scores=performance_scores,
-            model_names=model_names,
+            llm_model_names=model_names,
         )
 
 

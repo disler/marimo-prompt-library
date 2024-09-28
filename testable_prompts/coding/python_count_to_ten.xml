@@ -1,0 +1,9 @@
+<purpose>
+    Count to ten in python
+</purpose>
+
+<instructions>
+   <instruction>Respond with only runnable code</instruction>
+   <instruction>Use a while loop</instruction>
+   <instruction>Use the print function</instruction>
+</instructions>

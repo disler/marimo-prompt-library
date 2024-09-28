@@ -137,6 +137,14 @@ def build_gemini_duo():
     return gemini_1_5_pro, gemini_1_5_flash
 
 
+def build_ollama_models():
+
+    llama3_2_model: llm.Model = llm.get_model("llama3.2")
+    llama_3_2_1b_model: llm.Model = llm.get_model("llama3.2:1b")
+
+    return llama3_2_model, llama_3_2_1b_model
+
+
 def build_openai_model_stack():
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -180,3 +188,39 @@ def build_o1_series():
     o1_preview_model.key = OPENAI_API_KEY
 
     return o1_mini_model, o1_preview_model
+
+
+def build_small_cheap_and_fast():
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    gpt4_o_mini_model: llm.Model = llm.get_model("gpt-4o-mini")
+    gpt4_o_mini_model.key = OPENAI_API_KEY
+
+    gemini_1_5_flash_002: llm.Model = llm.get_model("gemini-1.5-flash-002")
+    gemini_1_5_flash_002.key = GEMINI_API_KEY
+
+    return gpt4_o_mini_model, gemini_1_5_flash_002
+
+
+def build_small_cheap_and_fast():
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    gpt4_o_mini_model: llm.Model = llm.get_model("gpt-4o-mini")
+    gpt4_o_mini_model.key = OPENAI_API_KEY
+
+    gemini_1_5_flash_002: llm.Model = llm.get_model("gemini-1.5-flash-002")
+    gemini_1_5_flash_002.key = GEMINI_API_KEY
+
+    return gpt4_o_mini_model, gemini_1_5_flash_002
+
+
+def build_gemini_1_2_002():
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+    gemini_1_5_pro_002: llm.Model = llm.get_model("gemini-1.5-pro-002")
+    gemini_1_5_flash_002: llm.Model = llm.get_model("gemini-1.5-flash-002")
+
+    gemini_1_5_pro_002.key = GEMINI_API_KEY
+    gemini_1_5_flash_002.key = GEMINI_API_KEY
+
+    return gemini_1_5_pro_002, gemini_1_5_flash_002

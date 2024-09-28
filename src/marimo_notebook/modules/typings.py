@@ -7,4 +7,10 @@ class FusionChainResult(BaseModel):
     all_prompt_responses: List[List[Any]]
     all_context_filled_prompts: List[List[str]]
     performance_scores: List[float]
-    model_names: List[str]
+    llm_model_names: List[str]
+
+
+class MultiLLMPromptExecution(BaseModel):
+    prompt_responses: List[Dict[str, Any]]
+    prompt: str
+    prompt_template: Optional[str] = None

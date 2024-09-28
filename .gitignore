@@ -178,3 +178,5 @@ dist
 __pycache__/
 
 .venv/
+
+prompt_executions/

@@ -502,16 +502,30 @@ wheels = [
 
 [[package]]
 name = "llm-gemini"
-version = "0.1a4"
+version = "0.1a5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
     { name = "ijson" },
     { name = "llm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f9/59/75cd412222572f974ec28360f3e9325e5bd1e965f5c4ba6b02ab4e43b6d1/llm_gemini-0.1a4.tar.gz", hash = "sha256:c3675a8d55f4bca425f32f1f243f1613dace95fa93083902bf3ddba28e8a826b", size = 7803 }
+sdist = { url = "https://files.pythonhosted.org/packages/d6/ba/fea9e857f363867a2bfac1be9d642417fda1c3ce40c7ab949de5e871214c/llm_gemini-0.1a5.tar.gz", hash = "sha256:2854ad2ab83dbbd14b5946266d8e96d0f8b8b6a8ab87ef248c3305a86c8c5340", size = 7868 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/17/b9/87f783f94a1a79aa7af69f895b6c26b0635e5139c48255453217d36b9910/llm_gemini-0.1a4-py3-none-any.whl", hash = "sha256:b4f0ef4c67e2b486268a19734e99e576114a9d31188fc0dac276978a56ec2b29", size = 8130 },
+    { url = "https://files.pythonhosted.org/packages/87/42/a81784ce1abf1ffb420f38ba60822d2524bb1fe72029de47242d9174e0d5/llm_gemini-0.1a5-py3-none-any.whl", hash = "sha256:357cb11f6608c469fa71d5769326348de4cf55e31d057dcddcee0613da93fa29", size = 8157 },
+]
+
+[[package]]
+name = "llm-ollama"
+version = "0.5.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "llm" },
+    { name = "ollama" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8e/73/ec7b0cd9b22f78ea676e7a64cad8b7d17b414a0f1b33c186ec44748b2d49/llm_ollama-0.5.0.tar.gz", hash = "sha256:337145f5f019dabafeb682a8cffacb44f67107b2c81ea99941724174a4787d59", size = 9481 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9c/d9/5ed4f0ea95c460b85aa8c07701d9c6e4cc07d57f6fd38a19f3b0628ef0b2/llm_ollama-0.5.0-py3-none-any.whl", hash = "sha256:7f4b270daf30443626211ea078d6e1700a92ffc36895b625cb901f9e76628335", size = 9338 },
 ]
 
 [[package]]
@@ -562,12 +576,14 @@ dependencies = [
     { name = "llm-claude" },
     { name = "llm-claude-3" },
     { name = "llm-gemini" },
+    { name = "llm-ollama" },
     { name = "mako" },
     { name = "marimo" },
     { name = "matplotlib" },
     { name = "openai" },
     { name = "pandas" },
     { name = "pydantic" },
+    { name = "pyperclip" },
     { name = "pytest" },
     { name = "python-dotenv" },
     { name = "tornado" },
@@ -580,13 +596,15 @@ requires-dist = [
     { name = "llm", specifier = ">=0.16" },
     { name = "llm-claude", specifier = ">=0.4.0" },
     { name = "llm-claude-3", specifier = ">=0.4.1" },
-    { name = "llm-gemini", specifier = ">=0.1a4" },
+    { name = "llm-gemini", specifier = ">=0.1a5" },
+    { name = "llm-ollama", specifier = ">=0.5.0" },
     { name = "mako", specifier = ">=1.3.5" },
     { name = "marimo", specifier = ">=0.8.18" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "openai", specifier = ">=1.47.0" },
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "pydantic", specifier = ">=2.9.2" },
+    { name = "pyperclip", specifier = ">=1.9.0" },
     { name = "pytest", specifier = ">=8.3.3" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "tornado", specifier = ">=6.4.1" },
@@ -699,6 +717,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/c0/90/ee8668e84c5d5cc080ef3beb622c016adf19ca3aa51afe9dbdcc6a9baf59/numpy-2.1.1-cp313-cp313t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:910b47a6d0635ec1bd53b88f86120a52bf56dcc27b51f18c7b4a2e2224c29f0f", size = 16023473 },
     { url = "https://files.pythonhosted.org/packages/38/a0/57c24b2131879183051dc698fbb53fd43b77c3fa85b6e6311014f2bc2973/numpy-2.1.1-cp313-cp313t-musllinux_1_1_x86_64.whl", hash = "sha256:13cc11c00000848702322af4de0147ced365c81d66053a67c2e962a485b3717c", size = 16400624 },
     { url = "https://files.pythonhosted.org/packages/bb/4c/14a41eb5c9548c6cee6af0936eabfd985c69230ffa2f2598321431a9aa0a/numpy-2.1.1-cp313-cp313t-musllinux_1_2_aarch64.whl", hash = "sha256:53e27293b3a2b661c03f79aa51c3987492bd4641ef933e366e0f9f6c9bf257ec", size = 14155072 },
+]
+
+[[package]]
+name = "ollama"
+version = "0.3.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a6/8e/60a9b065eb796ef3996451cbe2d8044f6b030696166693b9805ae33b8b4c/ollama-0.3.3.tar.gz", hash = "sha256:f90a6d61803117f40b0e8ff17465cab5e1eb24758a473cfe8101aff38bc13b51", size = 10390 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6a/ca/d22905ac3f768523f778189d38c9c6cd9edf4fa9dd09cb5a3fc57b184f90/ollama-0.3.3-py3-none-any.whl", hash = "sha256:ca6242ce78ab34758082b7392df3f9f6c2cb1d070a9dede1a4c545c929e16dba", size = 10267 },
 ]
 
 [[package]]
@@ -916,6 +946,12 @@ sdist = { url = "https://files.pythonhosted.org/packages/83/08/13f3bce01b2061f2b
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e5/0c/0e3c05b1c87bb6a1c76d281b0f35e78d2d80ac91b5f8f524cebf77f51049/pyparsing-3.1.4-py3-none-any.whl", hash = "sha256:a6a7ee4235a3f944aa1fa2249307708f893fe5717dc603503c6c7969c070fb7c", size = 104100 },
 ]
+
+[[package]]
+name = "pyperclip"
+version = "1.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/30/23/2f0a3efc4d6a32f3b63cdff36cd398d9701d26cda58e3ab97ac79fb5e60d/pyperclip-1.9.0.tar.gz", hash = "sha256:b7de0142ddc81bfc5c7507eea19da920b92252b548b96186caf94a5e2527d310", size = 20961 }
 
 [[package]]
 name = "pyreadline3"
