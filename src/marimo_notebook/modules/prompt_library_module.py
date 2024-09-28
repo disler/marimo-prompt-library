@@ -70,37 +70,30 @@ def record_llm_execution(
     return filepath
 
 
-def pull_in_language_model_rankings():
-    rankings_dir = os.getenv("LANGUAGE_MODEL_RANKINGS_DIR", "./language_model_rankings")
-    ranking_files = pull_in_dir_recursively(rankings_dir)
+def get_rankings():
+    rankings_file = os.getenv(
+        "LANGUAGE_MODEL_RANKINGS_FILE", "./language_model_rankings/rankings.json"
+    )
+    if not os.path.exists(rankings_file):
+        return []
+    with open(rankings_file, "r") as f:
+        rankings_data = json.load(f)
+    return [ModelRanking(**ranking) for ranking in rankings_data]
 
-    if len(ranking_files) == 0:
-        return {}
 
-    return ranking_files
-
-
-def upsert_rankings_file(name: str, rankings: List[ModelRanking]):
-    """
-    Upserts a file in the rankings directory. If the file does not exist, it will be created.
-    If the file exists, it will be updated.
-
-    rankings: [{
-        "llm_model_id": str,
-        "score": int,
-    }]
-    """
-
-    rankings_dir = os.getenv("LANGUAGE_MODEL_RANKINGS_DIR", "./language_model_rankings")
-    os.makedirs(rankings_dir, exist_ok=True)
-
-    filename = f"{name}.json"
-    filepath = os.path.join(rankings_dir, filename)
-
+def save_rankings(rankings: List[ModelRanking]):
+    rankings_file = os.getenv(
+        "LANGUAGE_MODEL_RANKINGS_FILE", "./language_model_rankings/rankings.json"
+    )
+    os.makedirs(os.path.dirname(rankings_file), exist_ok=True)
     rankings_dict = [ranking.model_dump() for ranking in rankings]
-    with open(filepath, "w") as f:
+    with open(rankings_file, "w") as f:
         json.dump(rankings_dict, f, indent=2)
 
 
-def new_rankings_file(model_ids: List[str]) -> List[ModelRanking]:
-    return [ModelRanking(llm_model_id=model_id, score=0) for model_id in model_ids]
+def reset_rankings(model_ids: List[str]):
+    new_rankings = [
+        ModelRanking(llm_model_id=model_id, score=0) for model_id in model_ids
+    ]
+    save_rankings(new_rankings)
+    return new_rankings

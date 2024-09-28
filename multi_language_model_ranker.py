@@ -303,138 +303,8 @@ def __(all_prompt_responses, copy_to_clipboard, mo):
 
 
 @app.cell
-def __(prompt_library_module):
-    _rankings = prompt_library_module.pull_in_language_model_rankings()
-    _rankings
-    return
-
-
-@app.cell
-def __(form, mo, prompt_library_module):
-    mo.stop(not form.value, mo.md(""))
-
-    # Create an input field for new ranking name
-    new_ranking_input = mo.ui.text(label="New ranking name")
-
-    # Create buttons for creating and loading rankings
-    create_ranking_button = mo.ui.run_button(label="Create Ranking")
-    load_ranking_button = mo.ui.run_button(label="Load Ranking")
-
-    # Load existing rankings
-    get_rankings, set_rankings = mo.state(prompt_library_module.pull_in_language_model_rankings())
-
-    # Create a dropdown for existing rankings
-    ranking_dropdown = mo.ui.dropdown(
-        options=list(get_rankings().keys()), label="Select existing ranking"
-    )
-
-    mo.hstack([new_ranking_input, create_ranking_button, ranking_dropdown, load_ranking_button])
-    return (
-        create_ranking_button,
-        get_rankings,
-        load_ranking_button,
-        new_ranking_input,
-        ranking_dropdown,
-        set_rankings,
-    )
-
-
-@app.cell
-def __(
-    create_ranking_button,
-    form,
-    mo,
-    new_ranking_input,
-    prompt_library_module,
-    set_rankings,
-):
-    mo.stop(not form.value, mo.md("no form values"))
-    mo.stop(not create_ranking_button.value, mo.md("awaiting create click"))
-    mo.stop(not new_ranking_input.value, mo.md("enter a name for the new ranking"))
-
-    _current_ranking_name = new_ranking_input.value
-    _current_ranking = prompt_library_module.new_rankings_file([model.model_id for model in form.value["models"]])
-    prompt_library_module.upsert_rankings_file(_current_ranking_name, _current_ranking)
-
-    set_rankings(lambda v: prompt_library_module.pull_in_language_model_rankings())
-
-    mo.md(f"Created new ranking: '{_current_ranking_name}'")
-    return
-
-
-@app.cell
-def __(
-    form,
-    load_ranking_button,
-    mo,
-    prompt_library_module,
-    ranking_dropdown,
-    rankings,
-):
-    mo.stop(not form.value, mo.md("no form values"))
-    mo.stop(not load_ranking_button.value, mo.md("awaiting load click"))
-    mo.stop(not ranking_dropdown.value, mo.md("select a ranking to load"))
-
-    current_ranking_name = ranking_dropdown.value
-    current_ranking = rankings[current_ranking_name]
-
-    # Create UI elements for each model
-    model_elements = []
-    for model_ranking in current_ranking:
-        llm_model_id = model_ranking["llm_model_id"]
-        score = model_ranking["score"]
-
-        stop_button = mo.ui.button(label=f"Stop {llm_model_id}")
-        increment_button = mo.ui.button(label=f"Increment {llm_model_id}")
-        score_display = mo.md(f"**Score:** {score}")
-
-        model_elements.append(
-            mo.hstack(
-                [
-                    mo.md(f"**{llm_model_id}**"),
-                    score_display,
-                    stop_button,
-                    increment_button,
-                ]
-            )
-        )
-
-    # Function to handle increment button click
-    def handle_increment(llm_model_id):
-        for ranking in current_ranking:
-            if ranking["llm_model_id"] == llm_model_id:
-                ranking["score"] += 1
-                break
-        prompt_library_module.upsert_rankings_file(
-            current_ranking_name, current_ranking
-        )
-        return current_ranking
-
-    # Add event handlers to increment buttons
-    for i, model_ranking in enumerate(current_ranking):
-        model_elements[i].children[3].on_click(
-            lambda _, i=i: handle_increment(current_ranking[i]["llm_model_id"])
-        )
-
-    mo.vstack(model_elements)
-    return (
-        current_ranking,
-        current_ranking_name,
-        handle_increment,
-        i,
-        increment_button,
-        llm_model_id,
-        model_elements,
-        model_ranking,
-        score,
-        score_display,
-        stop_button,
-    )
-
-
-@app.cell
 def __(copy_to_clipboard, mo, results_table):
-    mo.stop(not results_table.value, "No rows selected")
+    mo.stop(not results_table.value, "")
 
     selected_rows = results_table.value
     outputs = [row["Output"] for row in selected_rows]
@@ -443,6 +313,83 @@ def __(copy_to_clipboard, mo, results_table):
 
     mo.md(f"Copied {len(outputs)} response(s) to clipboard")
     return combined_output, outputs, selected_rows
+
+
+@app.cell
+def __(form, mo, prompt_library_module):
+    mo.stop(not form.value, mo.md(""))
+
+    # Create buttons for resetting and loading rankings
+    reset_ranking_button = mo.ui.run_button(label="Reset Rankings")
+    load_ranking_button = mo.ui.run_button(label="Load Rankings")
+
+    # Load existing rankings
+    get_rankings, set_rankings = mo.state(prompt_library_module.get_rankings())
+
+    mo.hstack([reset_ranking_button, load_ranking_button], justify="start")
+    return (
+        get_rankings,
+        load_ranking_button,
+        reset_ranking_button,
+        set_rankings,
+    )
+
+
+@app.cell
+def __():
+    # get_rankings()
+    return
+
+
+@app.cell
+def __(
+    form,
+    mo,
+    prompt_library_module,
+    reset_ranking_button,
+    set_rankings,
+):
+    mo.stop(not form.value, mo.md(""))
+    mo.stop(not reset_ranking_button.value, mo.md(""))
+
+    set_rankings(prompt_library_module.reset_rankings([model.model_id for model in form.value["models"]]))
+
+    # mo.md("Rankings reset successfully")
+    return
+
+
+@app.cell
+def __(form, load_ranking_button, mo, prompt_library_module, set_rankings):
+    mo.stop(not form.value, mo.md(""))
+    mo.stop(not load_ranking_button.value, mo.md(""))
+
+    set_rankings(prompt_library_module.get_rankings())
+    return
+
+
+@app.cell
+def __(get_rankings, mo, prompt_style):
+    # Create UI elements for each model
+    model_elements = []
+    for model_ranking in get_rankings():
+        llm_model_id = model_ranking.llm_model_id
+        score = model_ranking.score
+        model_elements.append(
+            mo.vstack(
+                [
+                    mo.md(f"**{llm_model_id}**  "),
+                    mo.hstack([
+                        mo.md(f""),
+                        mo.md(f"# {score}")
+                    ])
+                ],
+                justify="space-between",
+                gap="2"
+            ).style(prompt_style)
+        )
+
+    mo.hstack(model_elements, justify="start")
+    return llm_model_id, model_elements, model_ranking, score
 
 
 if __name__ == "__main__":
