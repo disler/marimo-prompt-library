@@ -1,0 +1,14 @@
+[
+  {
+    "llm_model_id": "gpt-4o-mini",
+    "score": 0
+  },
+  {
+    "llm_model_id": "llama3.2:latest",
+    "score": 0
+  },
+  {
+    "llm_model_id": "gemini-1.5-flash-002",
+    "score": 0
+  }
+]

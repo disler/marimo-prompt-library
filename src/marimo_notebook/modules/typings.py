@@ -14,3 +14,8 @@ class MultiLLMPromptExecution(BaseModel):
     prompt_responses: List[Dict[str, Any]]
     prompt: str
     prompt_template: Optional[str] = None
+
+
+class ModelRanking(BaseModel):
+    llm_model_id: str
+    score: int
