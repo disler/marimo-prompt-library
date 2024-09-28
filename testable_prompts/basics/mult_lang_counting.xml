@@ -1,0 +1,11 @@
+<purpose>
+    Count to ten then zero in python, typescript, bash, sql, and rust.
+</purpose>
+
+<instructions>
+   <instruction>Respond with only runnable code</instruction>
+   <instruction>Use a while loop</instruction>
+   <instruction>Use the print function</instruction>
+   <instruction>Group the code by language</instruction>
+   <instruction>Use markdown to format the languages (h1) and code (backticks)</instruction>
+</instructions>

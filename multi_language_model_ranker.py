@@ -285,7 +285,7 @@ def __(all_prompt_responses, copy_to_clipboard, form, mo):
         data=table_data,
         pagination=True,
         selection="multi",
-        page_size=10,
+        page_size=30,
         label="Model Responses",
         format_mapping={
             "Output": lambda val: "(trimmed) " + val[:5],
