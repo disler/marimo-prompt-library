@@ -60,9 +60,9 @@ def __(llm_module):
 
 @app.cell
 def __(map_testable_prompts, mo, models):
-    prompt_dropdown = mo.ui.dropdown(
+    prompt_multiselect = mo.ui.multiselect(
         options=list(map_testable_prompts.keys()),
-        label="Select a Prompt",
+        label="Select Prompts",
     )
     prompt_temp_slider = mo.ui.slider(
         start=0, stop=1, value=0.5, step=0.05, label="Temp"
@@ -72,7 +72,7 @@ def __(map_testable_prompts, mo, models):
         label="Models",
         value=["gpt-4o-mini", "llama3-2", "gemini-1-5-flash-002"],
     )
-    return model_multiselect, prompt_dropdown, prompt_temp_slider
+    return model_multiselect, prompt_multiselect, prompt_temp_slider
 
 
 @app.cell
@@ -87,18 +87,18 @@ def __():
 
 
 @app.cell
-def __(mo, model_multiselect, prompt_dropdown, prompt_temp_slider):
+def __(mo, model_multiselect, prompt_multiselect, prompt_temp_slider):
     form = (
         mo.md(
             r"""
             # Multi Language Model Ranker 📊
-            {prompt}
+            {prompts}
             {temp}
             {models}
             """
         )
         .batch(
-            prompt=prompt_dropdown,
+            prompts=prompt_multiselect,
             temp=prompt_temp_slider,
             models=model_multiselect,
         )
@@ -109,54 +109,74 @@ def __(mo, model_multiselect, prompt_dropdown, prompt_temp_slider):
 
 
 @app.cell
-def __(form, mo):
+def __(form, mo, prompt_style):
+    mo.stop(not form.value)
+
     selected_models_string = mo.ui.array([mo.ui.text(value=m.model_id, disabled=True) for m in form.value['models']])
-    mo.hstack(selected_models_string,align="start", justify="start")
-    return (selected_models_string,)
+    selected_prompts_string = mo.ui.array([mo.ui.text(value=p, disabled=True) for p in form.value['prompts']])
+
+    mo.vstack([
+        mo.md("## Selected Models"),
+        mo.hstack(selected_models_string, align="start", justify="start"),
+        mo.md("## Selected Prompts"),
+        mo.hstack(selected_prompts_string, align="start", justify="start")
+    ]).style(prompt_style)
+    return selected_models_string, selected_prompts_string
 
 
 @app.cell
 def __(form, llm_module, map_testable_prompts, mo, prompt_library_module):
     mo.stop(not form.value, "")
 
-    selected_prompt_name = form.value["prompt"]
-    selected_prompt = map_testable_prompts[selected_prompt_name]
+    all_prompt_responses = []
 
-    prompt_responses = []
+    total_executions = len(form.value["prompts"]) * len(form.value["models"])
 
     with mo.status.progress_bar(
         title="Running prompts on selected models...",
-        total=len(form.value["models"]),
+        total=total_executions,
         remove_on_exit=True,
     ) as prog_bar:
-        for model in form.value["models"]:
-            model_name = model.model_id
-            prog_bar.update(title=f"Prompting '{model_name}'", increment=1)
-            response = llm_module.prompt_with_temp(
-                model, selected_prompt, form.value["temp"]
-            )
-            prompt_responses.append(
-                {
-                    "model_id": model_name,
-                    "model": model,
-                    "output": response,
-                }
-            )
+        for selected_prompt_name in form.value["prompts"]:
+            selected_prompt = map_testable_prompts[selected_prompt_name]
+            prompt_responses = []
 
-    # Create a new list without the 'model' key for each response
-    list_model_execution_dict = [
-        {k: v for k, v in response.items() if k != "model"}
-        for response in prompt_responses
-    ]
+            for model in form.value["models"]:
+                model_name = model.model_id
+                prog_bar.update(title=f"Prompting '{model_name}' with '{selected_prompt_name}'", increment=1)
+                response = llm_module.prompt_with_temp(
+                    model, selected_prompt, form.value["temp"]
+                )
+                prompt_responses.append(
+                    {
+                        "model_id": model_name,
+                        "model": model,
+                        "output": response,
+                    }
+                )
 
-    # Record the execution
-    execution_filepath = prompt_library_module.record_llm_execution(
-        prompt=selected_prompt,
-        list_model_execution_dict=list_model_execution_dict,
-        prompt_template=selected_prompt_name,
-    )
-    print(f"Execution record saved to: {execution_filepath}")
+            # Create a new list without the 'model' key for each response
+            list_model_execution_dict = [
+                {k: v for k, v in response.items() if k != "model"}
+                for response in prompt_responses
+            ]
+
+            # Record the execution
+            execution_filepath = prompt_library_module.record_llm_execution(
+                prompt=selected_prompt,
+                list_model_execution_dict=list_model_execution_dict,
+                prompt_template=selected_prompt_name,
+            )
+            print(f"Execution record saved to: {execution_filepath}")
+
+            all_prompt_responses.append({
+                "prompt_name": selected_prompt_name,
+                "prompt": selected_prompt,
+                "responses": prompt_responses,
+                "execution_filepath": execution_filepath,
+            })
     return (
+        all_prompt_responses,
         execution_filepath,
         list_model_execution_dict,
         model,
@@ -166,54 +186,73 @@ def __(form, llm_module, map_testable_prompts, mo, prompt_library_module):
         response,
         selected_prompt,
         selected_prompt_name,
+        total_executions,
     )
 
 
 @app.cell
-def __(mo, prompt_responses, prompt_style, pyperclip):
+def __(all_prompt_responses, mo, prompt_style, pyperclip):
     def copy_to_clipboard(text):
         print("copying: ", text)
         pyperclip.copy(text)
-        return mo.md("**Copied to clipboard!**").callout(kind="success")
+        return 1
 
-    output_elements = [
-        mo.vstack(
-            [
-                mo.md(f"# Prompt Output ({response['model_id']})"),
-                mo.md(response["output"]),
-            ]
-        ).style(prompt_style)
-        for (idx, response) in enumerate(prompt_responses)
-    ]
+    all_prompt_elements = []
 
-    mo.vstack(
-        [
-            mo.hstack(output_elements),
-            # mo.hstack(output_elements, wrap=True),
-            # mo.vstack(output_elements),
-            # mo.carousel(output_elements),
-            # mo.hstack(copy_buttons)
-            # copy_buttons,
+    for prompt_data in all_prompt_responses:
+        prompt_output_elements = [
+            mo.vstack(
+                [
+                    mo.md(f"## {response['model_id']}"),
+                    mo.md(response["output"]),
+                ]
+            ).style(prompt_style)
+            for response in prompt_data['responses']
         ]
+
+
+        prompt_element = mo.vstack([
+            mo.md(f"# Prompt: {prompt_data['prompt_name']}"),
+            mo.hstack(prompt_output_elements),
+        ])
+
+        all_prompt_elements.append(prompt_element)
+
+    mo.vstack(all_prompt_elements)
+    return (
+        all_prompt_elements,
+        copy_to_clipboard,
+        prompt_data,
+        prompt_element,
+        prompt_output_elements,
     )
-    return copy_to_clipboard, output_elements
 
 
 @app.cell
-def __(copy_to_clipboard, mo, prompt_responses):
-    copy_buttons = mo.ui.array(
-        [
+def __():
+    # all_prompt_responses
+    return
+
+
+@app.cell
+def __(all_prompt_responses, copy_to_clipboard, mo):
+    prompt_copy_buttons = []
+    for i, _prompt_data in enumerate(all_prompt_responses):
+        prompt_buttons = mo.ui.array([
             mo.ui.button(
                 label=f"Copy {response['model_id']} response",
-                on_click=lambda v: copy_to_clipboard(prompt_responses[v]["output"]),
-                value=idx,
+                on_click=lambda v, i=i, j=j: copy_to_clipboard(all_prompt_responses[i]['responses'][j]['output']),
+                value=(i, j)
             )
-            for (idx, response) in enumerate(prompt_responses)
-        ]
-    )
+            for j, response in enumerate(_prompt_data['responses'])
+        ])
+        prompt_copy_buttons.append(mo.vstack([
+            mo.md(f"### {_prompt_data['prompt_name']}"),
+            mo.hstack(prompt_buttons)
+        ]))
 
-    mo.vstack(copy_buttons, align="center")
-    return (copy_buttons,)
+    mo.vstack(prompt_copy_buttons)
+    return i, prompt_buttons, prompt_copy_buttons
 
 
 if __name__ == "__main__":
