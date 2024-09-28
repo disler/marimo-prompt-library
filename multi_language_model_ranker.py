@@ -144,14 +144,14 @@ def __(form, llm_module, map_testable_prompts, mo, prompt_library_module):
             for model in form.value["models"]:
                 model_name = model.model_id
                 prog_bar.update(title=f"Prompting '{model_name}' with '{selected_prompt_name}'", increment=1)
-                response = llm_module.prompt_with_temp(
+                raw_prompt_response = llm_module.prompt_with_temp(
                     model, selected_prompt, form.value["temp"]
                 )
                 prompt_responses.append(
                     {
                         "model_id": model_name,
                         "model": model,
-                        "output": response,
+                        "output": raw_prompt_response,
                     }
                 )
 
@@ -183,7 +183,7 @@ def __(form, llm_module, map_testable_prompts, mo, prompt_library_module):
         model_name,
         prog_bar,
         prompt_responses,
-        response,
+        raw_prompt_response,
         selected_prompt,
         selected_prompt_name,
         total_executions,
@@ -192,6 +192,8 @@ def __(form, llm_module, map_testable_prompts, mo, prompt_library_module):
 
 @app.cell
 def __(all_prompt_responses, mo, prompt_style, pyperclip):
+    mo.stop(not all_prompt_responses, mo.md(""))
+
     def copy_to_clipboard(text):
         print("copying: ", text)
         pyperclip.copy(text)
@@ -199,22 +201,22 @@ def __(all_prompt_responses, mo, prompt_style, pyperclip):
 
     all_prompt_elements = []
 
-    for prompt_data in all_prompt_responses:
+    for loop_prompt_data in all_prompt_responses:
         prompt_output_elements = [
             mo.vstack(
                 [
-                    mo.md(f"## {response['model_id']}"),
+                    mo.md(f"#### {response['model_id']}"),
                     mo.md(response["output"]),
                 ]
             ).style(prompt_style)
-            for response in prompt_data['responses']
+            for response in loop_prompt_data['responses']
         ]
 
 
         prompt_element = mo.vstack([
-            mo.md(f"# Prompt: {prompt_data['prompt_name']}"),
+            mo.md(f"### Prompt: {loop_prompt_data['prompt_name']}"),
             mo.hstack(prompt_output_elements),
-        ])
+        ]).style({'border-left': "4px solid #CCC", 'padding': '2px 10px', 'background': '#ffffee'})
 
         all_prompt_elements.append(prompt_element)
 
@@ -222,7 +224,7 @@ def __(all_prompt_responses, mo, prompt_style, pyperclip):
     return (
         all_prompt_elements,
         copy_to_clipboard,
-        prompt_data,
+        loop_prompt_data,
         prompt_element,
         prompt_output_elements,
     )
@@ -236,23 +238,63 @@ def __():
 
 @app.cell
 def __(all_prompt_responses, copy_to_clipboard, mo):
-    prompt_copy_buttons = []
-    for i, _prompt_data in enumerate(all_prompt_responses):
-        prompt_buttons = mo.ui.array([
-            mo.ui.button(
-                label=f"Copy {response['model_id']} response",
-                on_click=lambda v, i=i, j=j: copy_to_clipboard(all_prompt_responses[i]['responses'][j]['output']),
-                value=(i, j)
-            )
-            for j, response in enumerate(_prompt_data['responses'])
-        ])
-        prompt_copy_buttons.append(mo.vstack([
-            mo.md(f"### {_prompt_data['prompt_name']}"),
-            mo.hstack(prompt_buttons)
-        ]))
+    # Prepare data for the table
+    table_data = []
+    for prompt_data in all_prompt_responses:
+        for response in prompt_data['responses']:
+            table_data.append({
+                'Prompt': prompt_data['prompt_name'],
+                'Model': response['model_id'],
+            })
 
-    mo.vstack(prompt_copy_buttons)
-    return i, prompt_buttons, prompt_copy_buttons
+    # Create the table
+    results_table = mo.ui.table(
+        data=table_data,
+        pagination=True,
+        selection='multi',
+        page_size=10,
+        label="Model Responses"
+    )
+
+    # Function to copy selected outputs to clipboard
+    def copy_selected_outputs():
+        selected_rows = results_table.value
+        if selected_rows:
+            outputs = [row['Output'] for row in selected_rows]
+            combined_output = "\n\n".join(outputs)
+            copy_to_clipboard(combined_output)
+            return f"Copied {len(outputs)} response(s) to clipboard"
+        return "No rows selected"
+
+    # Create the run button
+    run_button = mo.ui.run_button(label="Copy Selected Outputs")
+
+    # Display the table and run button
+    mo.vstack([
+        results_table,
+        run_button
+    ])
+    return (
+        copy_selected_outputs,
+        prompt_data,
+        response,
+        results_table,
+        run_button,
+        table_data,
+    )
+
+
+@app.cell
+def __(copy_to_clipboard, mo, results_table):
+    mo.stop(not results_table.value, "No rows selected")
+
+    selected_rows = results_table.value
+    outputs = [row['Output'] for row in selected_rows]
+    combined_output = "\n\n".join(outputs)
+    copy_to_clipboard(combined_output)
+
+    mo.md(f"Copied {len(outputs)} response(s) to clipboard")
+    return combined_output, outputs, selected_rows
 
 
 if __name__ == "__main__":
