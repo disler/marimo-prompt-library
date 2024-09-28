@@ -10,5 +10,17 @@
   {
     "llm_model_id": "gemini-1.5-flash-002",
     "score": 0
+  },
+  {
+    "llm_model_id": "gpt-4o",
+    "score": 0
+  },
+  {
+    "llm_model_id": "claude-3-5-sonnet-20240620",
+    "score": 0
+  },
+  {
+    "llm_model_id": "llama3.2:1b",
+    "score": 0
   }
 ]

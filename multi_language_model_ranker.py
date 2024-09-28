@@ -202,7 +202,7 @@ def __(form, llm_module, map_testable_prompts, mo, prompt_library_module):
 
 
 @app.cell
-def __(all_prompt_responses, mo, prompt_style, pyperclip):
+def __(all_prompt_responses, mo, pyperclip):
     mo.stop(not all_prompt_responses, mo.md(""))
 
     def copy_to_clipboard(text):
@@ -212,21 +212,30 @@ def __(all_prompt_responses, mo, prompt_style, pyperclip):
 
     all_prompt_elements = []
 
+    output_prompt_style = {
+        "background": "#eee",
+        "padding": "10px",
+        "border-radius": "10px",
+        "margin-bottom": "20px",
+        "min-width": "200px",
+        'box-shadow': "2px 2px 2px #ccc"
+    }
+
     for loop_prompt_data in all_prompt_responses:
         prompt_output_elements = [
             mo.vstack(
                 [
-                    mo.md(f"#### {response['model_id']}"),
+                    mo.md(f"#### {response['model_id']}").style({'font-weight': 'bold'}),
                     mo.md(response["output"]),
                 ]
-            ).style(prompt_style)
+            ).style(output_prompt_style)
             for response in loop_prompt_data["responses"]
         ]
 
         prompt_element = mo.vstack(
             [
                 mo.md(f"### Prompt: {loop_prompt_data['prompt_name']}"),
-                mo.hstack(prompt_output_elements),
+                mo.hstack(prompt_output_elements, wrap=True, justify='start'),
             ]
         ).style(
             {
@@ -243,6 +252,7 @@ def __(all_prompt_responses, mo, prompt_style, pyperclip):
         all_prompt_elements,
         copy_to_clipboard,
         loop_prompt_data,
+        output_prompt_style,
         prompt_element,
         prompt_output_elements,
     )
@@ -287,32 +297,72 @@ def __(all_prompt_responses, copy_to_clipboard, mo):
             return f"Copied {len(outputs)} response(s) to clipboard"
         return "No rows selected"
 
-    # Create the run button
-    run_button = mo.ui.run_button(label="Copy Selected Outputs")
+    # Create the run buttons
+    copy_button = mo.ui.run_button(label="🔗 Copy Selected Outputs")
+    score_button = mo.ui.run_button(label="👍 Vote Selected Outputs")
 
-    # Display the table and run button
-    mo.vstack([results_table, run_button])
+    # Display the table and run buttons
+    mo.vstack([
+        results_table,
+        mo.hstack([
+            score_button,
+         copy_button, 
+        ], justify="start")
+    ])
     return (
+        copy_button,
         copy_selected_outputs,
         prompt_data,
         response,
         results_table,
-        run_button,
+        score_button,
         table_data,
     )
 
 
 @app.cell
-def __(copy_to_clipboard, mo, results_table):
+def __(
+    copy_to_clipboard,
+    get_rankings,
+    mo,
+    prompt_library_module,
+    results_table,
+    score_button,
+    set_rankings,
+):
     mo.stop(not results_table.value, "")
 
     selected_rows = results_table.value
     outputs = [row["Output"] for row in selected_rows]
     combined_output = "\n\n".join(outputs)
-    copy_to_clipboard(combined_output)
 
-    mo.md(f"Copied {len(outputs)} response(s) to clipboard")
-    return combined_output, outputs, selected_rows
+    if score_button.value:
+        # Increment scores for selected models
+        current_rankings = get_rankings()
+        for row in selected_rows:
+            model_id = row["Model"]
+            for ranking in current_rankings:
+                if ranking.llm_model_id == model_id:
+                    ranking.score += 1
+                    break
+
+        # Save updated rankings
+        set_rankings(current_rankings)
+        prompt_library_module.save_rankings(current_rankings)
+
+        mo.md(f"Scored {len(selected_rows)} model(s)")
+    else:
+        copy_to_clipboard(combined_output)
+        mo.md(f"Copied {len(outputs)} response(s) to clipboard")
+    return (
+        combined_output,
+        current_rankings,
+        model_id,
+        outputs,
+        ranking,
+        row,
+        selected_rows,
+    )
 
 
 @app.cell
@@ -320,13 +370,16 @@ def __(form, mo, prompt_library_module):
     mo.stop(not form.value, mo.md(""))
 
     # Create buttons for resetting and loading rankings
-    reset_ranking_button = mo.ui.run_button(label="Reset Rankings")
-    load_ranking_button = mo.ui.run_button(label="Load Rankings")
+    reset_ranking_button = mo.ui.run_button(label="❌ Reset Rankings")
+    load_ranking_button = mo.ui.run_button(label="🔐 Load Rankings")
 
     # Load existing rankings
     get_rankings, set_rankings = mo.state(prompt_library_module.get_rankings())
 
-    mo.hstack([reset_ranking_button, load_ranking_button], justify="start")
+    mo.hstack([
+        load_ranking_button,
+        reset_ranking_button,
+    ], justify="start")
     return (
         get_rankings,
         load_ranking_button,
@@ -368,9 +421,19 @@ def __(form, load_ranking_button, mo, prompt_library_module, set_rankings):
 
 
 @app.cell
-def __(get_rankings, mo, prompt_style):
+def __(get_rankings, mo):
     # Create UI elements for each model
     model_elements = []
+
+    model_score_style = {
+        "background": "#eeF",
+        "padding": "10px",
+        "border-radius": "10px",
+        "margin-bottom": "20px",
+        "min-width": "150px",
+        'box-shadow': "2px 2px 2px #ccc"
+    }
+
     for model_ranking in get_rankings():
         llm_model_id = model_ranking.llm_model_id
         score = model_ranking.score
@@ -385,11 +448,17 @@ def __(get_rankings, mo, prompt_style):
                 ],
                 justify="space-between",
                 gap="2"
-            ).style(prompt_style)
+            ).style(model_score_style)
         )
 
     mo.hstack(model_elements, justify="start")
-    return llm_model_id, model_elements, model_ranking, score
+    return (
+        llm_model_id,
+        model_elements,
+        model_ranking,
+        model_score_style,
+        score,
+    )
 
 
 if __name__ == "__main__":
