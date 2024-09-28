@@ -109,25 +109,29 @@ def __(mo, model_multiselect, prompt_multiselect, prompt_temp_slider):
 
 
 @app.cell
-def __(form, mo, prompt_style):
+def __(form, map_testable_prompts, mo, prompt_style):
     mo.stop(not form.value)
 
     selected_models_string = mo.ui.array(
         [mo.ui.text(value=m.model_id, disabled=True) for m in form.value["models"]]
     )
-    selected_prompts_string = mo.ui.array(
-        [mo.ui.text(value=p, disabled=True) for p in form.value["prompts"]]
-    )
+
+    selected_prompts_accordion = mo.accordion({
+        prompt: mo.md(
+            f"```xml\n{map_testable_prompts[prompt]}\n```"
+        )
+        for prompt in form.value["prompts"]
+    })
 
     mo.vstack(
         [
             mo.md("## Selected Models"),
             mo.hstack(selected_models_string, align="start", justify="start"),
             mo.md("## Selected Prompts"),
-            mo.hstack(selected_prompts_string, align="start", justify="start"),
+            selected_prompts_accordion,
         ]
     ).style(prompt_style)
-    return selected_models_string, selected_prompts_string
+    return selected_models_string, selected_prompts_accordion
 
 
 @app.cell
@@ -259,8 +263,9 @@ def __(all_prompt_responses, mo, pyperclip):
 
 
 @app.cell
-def __(all_prompt_responses, copy_to_clipboard, mo):
+def __(all_prompt_responses, copy_to_clipboard, form, mo):
     mo.stop(not all_prompt_responses, mo.md(""))
+    mo.stop(not form.value, mo.md(""))
 
 
     # Prepare data for the table
@@ -366,8 +371,9 @@ def __(
 
 
 @app.cell
-def __(form, mo, prompt_library_module):
+def __(all_prompt_responses, form, mo, prompt_library_module):
     mo.stop(not form.value, mo.md(""))
+    mo.stop(not all_prompt_responses, mo.md(""))
 
     # Create buttons for resetting and loading rankings
     reset_ranking_button = mo.ui.run_button(label="❌ Reset Rankings")
