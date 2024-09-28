@@ -11,6 +11,7 @@ def __():
     import src.marimo_notebook.modules.prompt_library_module as prompt_library_module
     import json
     import pyperclip
+
     return json, llm_module, mo, prompt_library_module, pyperclip
 
 
@@ -28,6 +29,7 @@ def __(llm_module):
     gemini_1_5_pro, gemini_1_5_flash = llm_module.build_gemini_duo()
     gemini_1_5_pro_2, gemini_1_5_flash_2 = llm_module.build_gemini_1_2_002()
     llama3_2_model, llama3_2_1b_model = llm_module.build_ollama_models()
+    _, phi3_5_model, qwen2_5_model = llm_module.build_ollama_slm_models()
 
     models = {
         "o1-mini": llm_o1_mini,
@@ -41,6 +43,8 @@ def __(llm_module):
         "gemini-1-5-flash-002": gemini_1_5_flash_2,
         "llama3-2": llama3_2_model,
         "llama3-2-1b": llama3_2_1b_model,
+        "phi3-5": phi3_5_model,
+        "qwen2-5": qwen2_5_model,
     }
     return (
         gemini_1_5_flash,
@@ -116,12 +120,12 @@ def __(form, map_testable_prompts, mo, prompt_style):
         [mo.ui.text(value=m.model_id, disabled=True) for m in form.value["models"]]
     )
 
-    selected_prompts_accordion = mo.accordion({
-        prompt: mo.md(
-            f"```xml\n{map_testable_prompts[prompt]}\n```"
-        )
-        for prompt in form.value["prompts"]
-    })
+    selected_prompts_accordion = mo.accordion(
+        {
+            prompt: mo.md(f"```xml\n{map_testable_prompts[prompt]}\n```")
+            for prompt in form.value["prompts"]
+        }
+    )
 
     mo.vstack(
         [
@@ -222,14 +226,16 @@ def __(all_prompt_responses, mo, pyperclip):
         "border-radius": "10px",
         "margin-bottom": "20px",
         "min-width": "200px",
-        'box-shadow': "2px 2px 2px #ccc"
+        "box-shadow": "2px 2px 2px #ccc",
     }
 
     for loop_prompt_data in all_prompt_responses:
         prompt_output_elements = [
             mo.vstack(
                 [
-                    mo.md(f"#### {response['model_id']}").style({'font-weight': 'bold'}),
+                    mo.md(f"#### {response['model_id']}").style(
+                        {"font-weight": "bold"}
+                    ),
                     mo.md(response["output"]),
                 ]
             ).style(output_prompt_style)
@@ -239,7 +245,7 @@ def __(all_prompt_responses, mo, pyperclip):
         prompt_element = mo.vstack(
             [
                 mo.md(f"### Prompt: {loop_prompt_data['prompt_name']}"),
-                mo.hstack(prompt_output_elements, wrap=True, justify='start'),
+                mo.hstack(prompt_output_elements, wrap=True, justify="start"),
             ]
         ).style(
             {
@@ -266,7 +272,6 @@ def __(all_prompt_responses, mo, pyperclip):
 def __(all_prompt_responses, copy_to_clipboard, form, mo):
     mo.stop(not all_prompt_responses, mo.md(""))
     mo.stop(not form.value, mo.md(""))
-
 
     # Prepare data for the table
     table_data = []
@@ -307,13 +312,18 @@ def __(all_prompt_responses, copy_to_clipboard, form, mo):
     score_button = mo.ui.run_button(label="👍 Vote Selected Outputs")
 
     # Display the table and run buttons
-    mo.vstack([
-        results_table,
-        mo.hstack([
-            score_button,
-         copy_button, 
-        ], justify="start")
-    ])
+    mo.vstack(
+        [
+            results_table,
+            mo.hstack(
+                [
+                    score_button,
+                    copy_button,
+                ],
+                justify="start",
+            ),
+        ]
+    )
     return (
         copy_button,
         copy_selected_outputs,
@@ -382,10 +392,13 @@ def __(all_prompt_responses, form, mo, prompt_library_module):
     # Load existing rankings
     get_rankings, set_rankings = mo.state(prompt_library_module.get_rankings())
 
-    mo.hstack([
-        load_ranking_button,
-        reset_ranking_button,
-    ], justify="start")
+    mo.hstack(
+        [
+            load_ranking_button,
+            reset_ranking_button,
+        ],
+        justify="start",
+    )
     return (
         get_rankings,
         load_ranking_button,
@@ -411,7 +424,11 @@ def __(
     mo.stop(not form.value, mo.md(""))
     mo.stop(not reset_ranking_button.value, mo.md(""))
 
-    set_rankings(prompt_library_module.reset_rankings([model.model_id for model in form.value["models"]]))
+    set_rankings(
+        prompt_library_module.reset_rankings(
+            [model.model_id for model in form.value["models"]]
+        )
+    )
 
     # mo.md("Rankings reset successfully")
     return
@@ -437,7 +454,7 @@ def __(get_rankings, mo):
         "border-radius": "10px",
         "margin-bottom": "20px",
         "min-width": "150px",
-        'box-shadow': "2px 2px 2px #ccc"
+        "box-shadow": "2px 2px 2px #ccc",
     }
 
     for model_ranking in get_rankings():
@@ -447,13 +464,10 @@ def __(get_rankings, mo):
             mo.vstack(
                 [
                     mo.md(f"**{llm_model_id}**  "),
-                    mo.hstack([
-                        mo.md(f""),
-                        mo.md(f"# {score}")
-                    ])
+                    mo.hstack([mo.md(f""), mo.md(f"# {score}")]),
                 ],
                 justify="space-between",
-                gap="2"
+                gap="2",
             ).style(model_score_style)
         )
 

@@ -145,6 +145,15 @@ def build_ollama_models():
     return llama3_2_model, llama_3_2_1b_model
 
 
+def build_ollama_slm_models():
+
+    llama3_2_model: llm.Model = llm.get_model("llama3.2")
+    phi3_5_model: llm.Model = llm.get_model("phi3.5:latest")
+    qwen2_5_model: llm.Model = llm.get_model("qwen2.5:latest")
+
+    return llama3_2_model, phi3_5_model, qwen2_5_model
+
+
 def build_openai_model_stack():
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
