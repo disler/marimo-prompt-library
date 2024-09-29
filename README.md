@@ -4,6 +4,9 @@
 > Take this codebase and use it as a starter codebase to build your own personal prompt library.
 >
 > Marimo reactive notebooks & Prompt Library [walkthrough](https://youtu.be/PcLkBkQujMI)
+> Run multiple prompts against multiple models (SLMs & LLMs) [walkthrough](https://youtu.be/VC6QCEXERpU)
+
+<img src="./images/multi_llm_multi_llm.png" alt="multi llm prompting" style="max-width: 750px;">
 
 <img src="./images/marimo_prompt_library.png" alt="marimo promptlibrary" style="max-width: 750px;">
 
