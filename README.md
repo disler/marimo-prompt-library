@@ -20,6 +20,8 @@
 > Quickly run and test prompts across models
 - 🟡 Copy `.env.sample` to `.env` and set your keys (minimally set `OPENAI_API_KEY`)
     - Add other keys and update the notebook to add support for additional SOTA LLMs
+- 🟡 Install Ollama (https://ollama.ai/) and pull the models you want to use
+    - Update the notebook to use Ollama models you have installed
 - To Edit, Run `uv run marimo edit adhoc_prompting.py`
 - To View, Run `uv run marimo run adhoc_prompting.py`
 
@@ -27,8 +29,26 @@
 > Build, Manage, Reuse, Version, and Iterate on your Prompt Library
 - 🟡 Copy `.env.sample` to `.env` and set your keys (minimally set `OPENAI_API_KEY`)
     - Add other keys and update the notebook to add support for additional SOTA LLMs
+- 🟡 Install Ollama (https://ollama.ai/) and pull the models you want to use
+    - Update the notebook to use Ollama models you have installed
 - To Edit, Run `uv run marimo edit prompt_library.py`
 - To View, Run `uv run marimo run prompt_library.py`
+
+## 4. Multi-LLM Prompt
+> Quickly test a single prompt across multiple language models
+- 🟡 Ensure your `.env` file is set up with the necessary API keys for the models you want to use
+- 🟡 Install Ollama (https://ollama.ai/) and pull the models you want to use
+    - Update the notebook to use Ollama models you have installed
+- To Edit, Run `uv run marimo edit multi_llm_prompting.py`
+- To View, Run `uv run marimo run multi_llm_prompting.py`
+
+## 5. Multi Language Model Ranker
+> Compare and rank multiple language models across various prompts
+- 🟡 Ensure your `.env` file is set up with the necessary API keys for the models you want to compare
+- 🟡 Install Ollama (https://ollama.ai/) and pull the models you want to use
+    - Update the notebook to use Ollama models you have installed
+- To Edit, Run `uv run marimo edit multi_language_model_ranker.py`
+- To View, Run `uv run marimo run multi_language_model_ranker.py`
 
 ## General Usage
 > See the [Marimo Docs](https://docs.marimo.io/index.html) for general usage details
@@ -41,6 +61,8 @@
 - Prompt testing & Benchmarking
 - LLM comparison
 - Prompt templating
+- Run a single prompt against multiple LLMs & SLMs
+- Compare multi prompts against multiple LLMs & SLMs
 - Anything you can imagine!
 
 ## Advantages of Marimo
@@ -84,3 +106,5 @@
 - https://youtu.be/PcLkBkQujMI
 - https://github.com/BuilderIO/gpt-crawler
 - https://github.com/simonw/llm
+- https://ollama.com/
+- https://ai.meta.com/blog/llama-3-2-connect-2024-vision-edge-mobile-devices/

@@ -11,7 +11,6 @@ def __():
     import src.marimo_notebook.modules.prompt_library_module as prompt_library_module
     import json
     import pyperclip
-
     return json, llm_module, mo, prompt_library_module, pyperclip
 
 
@@ -25,39 +24,32 @@ def __(prompt_library_module):
 def __(llm_module):
     llm_o1_mini, llm_o1_preview = llm_module.build_o1_series()
     llm_gpt_4o_latest, llm_gpt_4o_mini = llm_module.build_openai_latest_and_fastest()
-    llm_sonnet = llm_module.build_sonnet_3_5()
-    gemini_1_5_pro, gemini_1_5_flash = llm_module.build_gemini_duo()
-    gemini_1_5_pro_2, gemini_1_5_flash_2 = llm_module.build_gemini_1_2_002()
-    llama3_2_model, llama3_2_1b_model = llm_module.build_ollama_models()
-    _, phi3_5_model, qwen2_5_model = llm_module.build_ollama_slm_models()
+    # llm_sonnet = llm_module.build_sonnet_3_5()
+    # gemini_1_5_pro, gemini_1_5_flash = llm_module.build_gemini_duo()
+    # gemini_1_5_pro_2, gemini_1_5_flash_2 = llm_module.build_gemini_1_2_002()
+    # llama3_2_model, llama3_2_1b_model = llm_module.build_ollama_models()
+    # _, phi3_5_model, qwen2_5_model = llm_module.build_ollama_slm_models()
 
     models = {
         "o1-mini": llm_o1_mini,
         "o1-preview": llm_o1_preview,
         "gpt-4o-latest": llm_gpt_4o_latest,
         "gpt-4o-mini": llm_gpt_4o_mini,
-        "sonnet-3.5": llm_sonnet,
-        "gemini-1-5-pro": gemini_1_5_pro,
-        "gemini-1-5-flash": gemini_1_5_flash,
-        "gemini-1-5-pro-002": gemini_1_5_pro_2,
-        "gemini-1-5-flash-002": gemini_1_5_flash_2,
-        "llama3-2": llama3_2_model,
-        "llama3-2-1b": llama3_2_1b_model,
-        "phi3-5": phi3_5_model,
-        "qwen2-5": qwen2_5_model,
+        # "sonnet-3.5": llm_sonnet,
+        # "gemini-1-5-pro": gemini_1_5_pro,
+        # "gemini-1-5-flash": gemini_1_5_flash,
+        # "gemini-1-5-pro-002": gemini_1_5_pro_2,
+        # "gemini-1-5-flash-002": gemini_1_5_flash_2,
+        # "llama3-2": llama3_2_model,
+        # "llama3-2-1b": llama3_2_1b_model,
+        # "phi3-5": phi3_5_model,
+        # "qwen2-5": qwen2_5_model,
     }
     return (
-        gemini_1_5_flash,
-        gemini_1_5_flash_2,
-        gemini_1_5_pro,
-        gemini_1_5_pro_2,
-        llama3_2_1b_model,
-        llama3_2_model,
         llm_gpt_4o_latest,
         llm_gpt_4o_mini,
         llm_o1_mini,
         llm_o1_preview,
-        llm_sonnet,
         models,
     )
 
@@ -74,7 +66,7 @@ def __(map_testable_prompts, mo, models):
     model_multiselect = mo.ui.multiselect(
         options=models.copy(),
         label="Models",
-        value=["gpt-4o-mini", "llama3-2", "gemini-1-5-flash-002"],
+        value=["gpt-4o-mini",],
     )
     return model_multiselect, prompt_multiselect, prompt_temp_slider
 
@@ -293,7 +285,8 @@ def __(all_prompt_responses, copy_to_clipboard, form, mo):
         page_size=30,
         label="Model Responses",
         format_mapping={
-            "Output": lambda val: "(trimmed) " + val[:5],
+            "Output": lambda val: "(trimmed) " + val[:15],
+            # "Output": lambda val: val,
         },
     )
 
@@ -471,7 +464,7 @@ def __(get_rankings, mo):
             ).style(model_score_style)
         )
 
-    mo.hstack(model_elements, justify="start")
+    mo.hstack(model_elements, justify="start", wrap=True)
     return (
         llm_model_id,
         model_elements,
