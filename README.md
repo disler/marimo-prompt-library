@@ -112,3 +112,4 @@
 - https://github.com/simonw/llm
 - https://ollama.com/
 - https://ai.meta.com/blog/llama-3-2-connect-2024-vision-edge-mobile-devices/
+- https://qwenlm.github.io/
