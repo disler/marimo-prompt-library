@@ -7,7 +7,7 @@
 >
 > Run multiple prompts against multiple models (SLMs & LLMs) [walkthrough](https://youtu.be/VC6QCEXERpU)
 
-<img src="./images/multi_slm_llm_multi_slm_llm.png" alt="multi llm prompting" style="max-width: 750px;">
+<img src="./images/multi_slm_llm_prompt_and_model.png" alt="multi llm prompting" style="max-width: 750px;">
 
 <img src="./images/marimo_prompt_library.png" alt="marimo promptlibrary" style="max-width: 750px;">
 
