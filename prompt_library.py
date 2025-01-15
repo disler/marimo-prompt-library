@@ -22,24 +22,29 @@ def __(prompt_library_module):
 def __(llm_module):
     llm_o1_mini, llm_o1_preview = llm_module.build_o1_series()
     llm_gpt_4o_latest, llm_gpt_4o_mini = llm_module.build_openai_latest_and_fastest()
-    # llm_sonnet = llm_module.build_sonnet_3_5()
-    # gemini_1_5_pro, gemini_1_5_flash = llm_module.build_gemini_duo()
+    mistral_model, phi4_14b_model, llama3_2_model = llm_module.build_ollama_models()
+    llama_3_3_70b_versatile_model = llm_module.build_groq_models()
 
     models = {
         "o1-mini": llm_o1_mini,
         "o1-preview": llm_o1_preview,
         "gpt-4o-latest": llm_gpt_4o_latest,
         "gpt-4o-mini": llm_gpt_4o_mini,
-        # "sonnet-3.5": llm_sonnet,
-        # "gemini-1-5-pro": gemini_1_5_pro,
-        # "gemini-1-5-flash": gemini_1_5_flash,
+        "phi4": phi4_14b_model,
+        "mistral": mistral_model,
+        "llama3.2": llama3_2_model,
+        "groq:llama-3.3-70b-versatile": llama_3_3_70b_versatile_model,
     }
     return (
+        llama3_2_model,
+        llama_3_3_70b_versatile_model,
         llm_gpt_4o_latest,
         llm_gpt_4o_mini,
         llm_o1_mini,
         llm_o1_preview,
+        mistral_model,
         models,
+        phi4_14b_model,
     )
 
 
@@ -197,6 +202,11 @@ def __(context_filled_prompt, form, llm_module, mo):
         {"background": "#eee", "padding": "10px", "border-radius": "10px"}
     )
     return model, prompt_response
+
+
+@app.cell
+def __():
+    return
 
 
 if __name__ == "__main__":

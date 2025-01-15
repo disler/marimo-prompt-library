@@ -2,6 +2,8 @@ import llm
 from dotenv import load_dotenv
 import os
 from mako.template import Template
+from .groq import get_model as get_groq_model
+from .ollama import get_model as get_ollama_model
 
 # Load environment variables from .env file
 load_dotenv()
@@ -23,9 +25,30 @@ def parse_markdown_backticks(str) -> str:
     return str.strip()
 
 
-def prompt(model: llm.Model, prompt: str):
-    res = model.prompt(prompt, stream=False)
-    return res.text()
+def prompt(model: llm.Model, prompt: str, **kwargs) -> str:
+    """
+    Send a prompt to a language model and return the response.
+    
+    Args:
+        model: The language model to use
+        prompt: The prompt text
+        **kwargs: Additional arguments to pass to the model's prompt method
+    
+    Returns:
+        str: The model's response
+    """
+    # Set stream=False by default if not specified
+    kwargs.setdefault('stream', False)
+    
+    # Get the response from the model
+    response = model.prompt(prompt, **kwargs)
+    
+    # Handle the response based on streaming mode
+    if kwargs.get('stream', False):
+        return response
+    else:
+        # Join all chunks into a single string
+        return ''.join(chunk for chunk in response)
 
 
 def prompt_with_temp(model: llm.Model, prompt: str, temperature: float = 0.7):
@@ -138,20 +161,21 @@ def build_gemini_duo():
 
 
 def build_ollama_models():
+    mistral_model: llm.Model = get_ollama_model("mistral:latest")
+    phi4_14b_model: llm.Model = get_ollama_model("phi4:latest")
+    llama3_2_model: llm.Model = get_ollama_model("llama3.2:latest")
+    return mistral_model, phi4_14b_model, llama3_2_model
 
-    llama3_2_model: llm.Model = llm.get_model("llama3.2")
-    llama_3_2_1b_model: llm.Model = llm.get_model("llama3.2:1b")
-
-    return llama3_2_model, llama_3_2_1b_model
-
+def build_groq_models():
+    groq_api_key = os.getenv("GROQ_API_KEY")
+    llama_3_3_70b_versatile_model: llm.Model = get_groq_model("llama-3.3-70b-versatile")
+    llama_3_3_70b_versatile_model.key = groq_api_key
+    return llama_3_3_70b_versatile_model
 
 def build_ollama_slm_models():
+    llama3_2_model: llm.Model = llm.get_model("mistral:latest")
 
-    llama3_2_model: llm.Model = llm.get_model("llama3.2")
-    phi3_5_model: llm.Model = llm.get_model("phi3.5:latest")
-    qwen2_5_model: llm.Model = llm.get_model("qwen2.5:latest")
-
-    return llama3_2_model, phi3_5_model, qwen2_5_model
+    return [llama3_2_model]
 
 
 def build_openai_model_stack():
